@@ -1,0 +1,55 @@
+/* Base styles (Mobile First) */
+.footerContainer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #ffffff;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  padding: 10px 0;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.navItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #718096; /* Gray color */
+  font-size: 0.75rem;
+  transition: color 0.2s ease;
+}
+
+.icon {
+  font-size: 1.25rem;
+  margin-bottom: 4px;
+}
+
+.navItem:hover,
+.navItem:active {
+  color: #3182ce; /* Primary theme color */
+}
+
+/* Desktop View (Change this width if needed) */
+@media (min-width: 768px) {
+  .footerContainer {
+    position: relative;
+    box-shadow: none;
+    background-color: #f7fafc;
+    border-top: 1px solid #e2e8f0;
+    padding: 20px 0;
+  }
+  
+  .nav {
+    justify-content: center;
+    gap: 40px;
+  }
+}

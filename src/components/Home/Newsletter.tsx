@@ -2,8 +2,8 @@ import { MailIcon } from "lucide-react";
 
 const Newsletter = () => {
     return (
-        <section className="bg-white py-10 sm:py-18 px-4 sm:px-6 lg:px-8 rounded-3xl mx-auto shadow-xs mt-16 sm:mt-32 mb-12 sm:mb-20">
-            <div className="max-w-2xl mx-auto text-center">
+        <section className="">
+            {/* <div className="max-w-2xl mx-auto text-center">
                 <div className="size-12 sm:size-16 bg-white rounded-xl flex-center mx-auto mb-4 sm:mb-6 shadow">
                     <MailIcon className="size-6 sm:size-8 text-app-green" strokeWidth={1.5} />
                 </div>
@@ -17,7 +17,7 @@ const Newsletter = () => {
                         Subscribe
                     </button>
                 </form>
-            </div>
+            </div> */}
         </section>
     );
 };

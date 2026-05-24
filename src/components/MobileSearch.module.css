@@ -1,0 +1,232 @@
+.searchContainer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9998;
+}
+
+.searchModal {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(180deg, #ffffff 0%, #f8faf8 100%);
+  border-radius: 24px 24px 0 0;
+  max-height: 90vh;
+  overflow-y: auto;
+  z-index: 9999;
+  animation: slideUp 0.3s ease-out;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.searchHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 12px;
+  border-bottom: 1px solid #e8e8e8;
+  position: sticky;
+  top: 0;
+  background: linear-gradient(180deg, #ffffff 0%, #f9faf9 100%);
+  z-index: 1;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1b3022;
+  letter-spacing: -0.5px;
+}
+
+.closeButton {
+  background: linear-gradient(135deg, #f0f0f0 0%, #e8e8e8 100%);
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  transition: all 0.2s ease;
+  border-radius: 10px;
+  width: 32px;
+  height: 32px;
+}
+
+.closeButton:active {
+  background: linear-gradient(135deg, #e0e0e0 0%, #d8d8d8 100%);
+  transform: scale(0.95);
+}
+
+.searchForm {
+  padding: 12px;
+  display: flex;
+  gap: 6px;
+  position: sticky;
+  top: 0;
+  background: linear-gradient(180deg, #ffffff 0%, #f9faf9 100%);
+  border-bottom: 1px solid #e8e8e8;
+  z-index: 10;
+}
+
+.inputContainer {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, #f5f5f5 0%, #efefef 100%);
+  border-radius: 20px;
+  padding: 0 10px;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.inputContainer:focus-within {
+  background: linear-gradient(135deg, #ffffff 0%, #f9f9f9 100%);
+  border-color: #22c55e;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.15);
+}
+
+.searchIcon {
+  width: 16px;
+  height: 16px;
+  color: #22c55e;
+  flex-shrink: 0;
+}
+
+.searchInput {
+  flex: 1;
+  border: none;
+  background: none;
+  padding: 8px 8px;
+  font-size: 14px;
+  outline: none;
+  color: #333;
+  font-weight: 500;
+}
+
+.searchInput::placeholder {
+  color: #999;
+  font-weight: 400;
+}
+
+.submitButton {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  color: white;
+  border: none;
+  padding: 8px 10px;
+  border-radius: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+  letter-spacing: 0.5px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.submitButton:active {
+  background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+  transform: scale(0.95);
+  box-shadow: 0 2px 6px rgba(34, 197, 94, 0.2);
+}
+
+.suggestionsContainer {
+  padding: 0;
+  max-height: calc(90vh - 140px);
+  overflow-y: auto;
+}
+
+.loadingText {
+  padding: 24px 12px;
+  text-align: center;
+  color: #999;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.suggestionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.suggestionItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-bottom: 1px solid #f0f0f0;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.suggestionItem:active {
+  background: linear-gradient(90deg, #f5f5f5 0%, #f0f0f0 100%);
+  padding-left: 16px;
+}
+
+.suggestionImage {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.suggestionContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.suggestionText {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1b3022;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.3px;
+}
+
+.suggestionPrice {
+  font-size: 12px;
+  color: #22c55e;
+  font-weight: 700;
+  margin: 4px 0 0 0;
+}
+
+.noSuggestions {
+  padding: 36px 12px;
+  text-align: center;
+  color: #999;
+  font-size: 13px;
+  font-weight: 500;
+}

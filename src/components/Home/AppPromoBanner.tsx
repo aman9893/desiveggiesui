@@ -1,6 +1,25 @@
+import { useState, useEffect } from "react";
 import { appPromoBannerData, assets } from "../../assets/assets";
 
 const AppPromoBanner = () => {
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+
+        checkMobile();
+        window.addEventListener("resize", checkMobile);
+
+        return () => window.removeEventListener("resize", checkMobile);
+    }, []);
+
+    // Hide this section on mobile devices
+    if (isMobile) {
+        return null;
+    }
+
     return (
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 md:py-20 my-8 sm:my-14 bg-green-950 rounded-2xl">
             <div className="flex flex-col md:flex-row items-center justify-between gap-6 sm:gap-8 xl:px-10">

@@ -11,6 +11,7 @@ import Checkout from "./pages/Checkout";
 import MyOrders from "./pages/MyOrders";
 import OrderTracking from "./pages/OrderTracking";
 import Addresses from "./pages/Addresses";
+import Profile from "./pages/Profile";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -43,6 +44,7 @@ const App = () => {
                         <Route path="orders" element={<MyOrders />} />
                         <Route path="orders/:id" element={<OrderTracking />} />
                         <Route path="addresses" element={<Addresses />} />
+                        <Route path="profile" element={<Profile />} />
                     </Route>
                 </Route>
                 {/* Admin pages */}

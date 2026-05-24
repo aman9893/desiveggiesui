@@ -1,8 +1,27 @@
+import { useState, useEffect } from "react";
 import { BikeIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 import { footerData } from "../assets/assets";
 
 const Footer = () => {
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+
+        checkMobile();
+        window.addEventListener("resize", checkMobile);
+
+        return () => window.removeEventListener("resize", checkMobile);
+    }, []);
+
+    // Hide this section on mobile devices
+    if (isMobile) {
+        return null;
+    }
+
     return (
         <footer className="bg-app-green text-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -78,6 +97,8 @@ const Footer = () => {
                 </div>
             </div>
         </footer>
+
+
     );
 };
 

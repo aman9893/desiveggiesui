@@ -2,7 +2,7 @@ import { heroSectionData } from "../../assets/assets";
 
 const Features = () => {
     return (
-        <section className="bg-white py-4 sm:py-5 border border-app-border/80 rounded-xl mb-8 sm:mb-12">
+        <section className="bg-white py-1 sm:py-0 border border-app-border/80 rounded-xl ">
             <div className="mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
                     {heroSectionData.hero_features.map((feature, i) => (
