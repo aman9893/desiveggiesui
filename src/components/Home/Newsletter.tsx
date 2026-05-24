@@ -1,5 +1,3 @@
-import { MailIcon } from "lucide-react";
-
 const Newsletter = () => {
     return (
         <section className="">
