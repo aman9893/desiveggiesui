@@ -1,5 +1,6 @@
 import { Toaster } from "react-hot-toast";
 import { Route, Routes } from "react-router-dom";
+import ScrollToTop from "./components/ScrollToTop";
 import Login from "./pages/Login";
 import AppLayout from "./pages/AppLayout";
 import Home from "./pages/Home";
@@ -28,6 +29,7 @@ const App = () => {
     return (
         <>
             <Toaster position="top-right" toastOptions={{ duration: 3000, style: { background: "#1B3022", color: "#fff", borderRadius: "12px", fontSize: "14px" } }} />
+            <ScrollToTop />
 
             <Routes>
                 {/* Auth pages - No Navbar/Footer */}

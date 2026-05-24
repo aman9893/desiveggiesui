@@ -101,6 +101,7 @@
   padding: 0 10px;
   border: 2px solid transparent;
   transition: all 0.3s ease;
+  overflow: hidden;
 }
 
 .inputContainer:focus-within {
@@ -114,6 +115,7 @@
   height: 16px;
   color: #22c55e;
   flex-shrink: 0;
+  margin-left: 8px;
 }
 
 .searchInput {
@@ -121,10 +123,12 @@
   border: none;
   background: none;
   padding: 8px 8px;
-  font-size: 14px;
+  font-size: 16px;
   outline: none;
   color: #333;
   font-weight: 500;
+  touch-action: manipulation;
+  -webkit-user-select: text;
 }
 
 .searchInput::placeholder {

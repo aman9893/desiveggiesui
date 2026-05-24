@@ -20,12 +20,20 @@
     --font-serif: "DM Serif Display", serif;
 }
 
-body {
+html, body {
     font-family: var(--font-sans);
     color: var(--color-app-text);
     background-color: var(--color-app-cream);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
+}
+
+input, textarea, select {
+    font-size: 16px;
+    touch-action: manipulation;
 }
 
 /* Scrollbar */
