@@ -128,3 +128,6 @@ input:focus {
 .animate-pulse-soft {
     animation: pulse-soft 2s ease-in-out infinite;
 }
+.margin-bottom-60{
+    margin-bottom: 60px;
+}
