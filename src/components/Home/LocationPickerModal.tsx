@@ -5,13 +5,12 @@ import styles from "./LocationPickerModal.module.css";
 interface LocationPickerModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onSelectLocation: (location: { address: string; city: string; lat: number; lng: number; label: string }) => void;
+    onSelectLocation: (location: { address: string; city: string; areaName: string; buildingName: string; lat: number; lng: number; label: string }) => void;
 }
 
-const GOOGLE_MAPS_API_KEY = "AIzaSyANyUUiWQ3leMbrt33_A8u3XJDhrzwUjCw";
-
 const LocationPickerModal = ({ isOpen, onClose, onSelectLocation }: LocationPickerModalProps) => {
-    const mapRef = useRef<google.maps.Map | null>(null);
+    const mapContainerRef = useRef<HTMLDivElement>(null);
+    const googleMapRef = useRef<google.maps.Map | null>(null);
     const markerRef = useRef<google.maps.Marker | null>(null);
     const [currentLocation, setCurrentLocation] = useState<{ lat: number; lng: number } | null>(null);
     const [address, setAddress] = useState("");
@@ -21,9 +20,9 @@ const LocationPickerModal = ({ isOpen, onClose, onSelectLocation }: LocationPick
 
     // Initialize map
     useEffect(() => {
-        if (!isOpen || !mapRef.current) return;
+        if (!isOpen || !mapContainerRef.current) return;
 
-        const map = new google.maps.Map(mapRef.current, {
+        const map = new google.maps.Map(mapContainerRef.current, {
             zoom: 15,
             center: { lat: 28.7041, lng: 77.1025 }, // Default to Delhi
             mapTypeControl: false,
@@ -38,7 +37,7 @@ const LocationPickerModal = ({ isOpen, onClose, onSelectLocation }: LocationPick
             icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
         });
 
-        mapRef.current = map;
+        googleMapRef.current = map;
         markerRef.current = marker;
 
         // Get user's current location
@@ -117,8 +116,8 @@ const LocationPickerModal = ({ isOpen, onClose, onSelectLocation }: LocationPick
                     const loc = { lat, lng };
 
                     setCurrentLocation(loc);
-                    if (mapRef.current) {
-                        mapRef.current.setCenter(loc);
+                    if (googleMapRef.current) {
+                        googleMapRef.current.setCenter(loc);
                     }
                     if (markerRef.current) {
                         markerRef.current.setPosition(loc);
@@ -126,7 +125,7 @@ const LocationPickerModal = ({ isOpen, onClose, onSelectLocation }: LocationPick
                     getAddressFromCoordinates(lat, lng);
                     setIsLoadingLocation(false);
                 },
-                (error) => {
+                (_error) => {
                     alert("Unable to access your location. Please enable location services.");
                     setIsLoadingLocation(false);
                 }
@@ -142,10 +141,14 @@ const LocationPickerModal = ({ isOpen, onClose, onSelectLocation }: LocationPick
 
         const parts = address.split(",");
         const city = parts[parts.length - 2]?.trim() || "";
+        const areaName = parts[parts.length - 3]?.trim() || "";
+        const buildingName = parts[0]?.trim() || "";
 
         onSelectLocation({
             address,
             city,
+            areaName,
+            buildingName,
             lat: currentLocation.lat,
             lng: currentLocation.lng,
             label: "Current Location",
@@ -178,7 +181,7 @@ const LocationPickerModal = ({ isOpen, onClose, onSelectLocation }: LocationPick
                     />
                 </div>
 
-                <div className={styles.mapContainer} ref={mapRef} />
+                <div className={styles.mapContainer} ref={mapContainerRef} />
 
                 <div className={styles.currentLocationButton}>
                     <button onClick={handleUseCurrentLocation} className={styles.enableButton} disabled={isLoadingLocation}>
