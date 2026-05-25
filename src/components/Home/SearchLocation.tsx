@@ -67,6 +67,12 @@ const SearchLocation = () => {
         };
         handleLocationSelect(newLocation);
         setShowLocationPicker(false);
+        window.scrollTo(0, 0);
+    };
+
+    const handleCloseLocationPicker = () => {
+        setShowLocationPicker(false);
+        window.scrollTo(0, 0);
     };
 
     return (
@@ -132,7 +138,7 @@ const SearchLocation = () => {
             {/* Location Picker Modal */}
             <LocationPickerModal
                 isOpen={showLocationPicker}
-                onClose={() => setShowLocationPicker(false)}
+                onClose={handleCloseLocationPicker}
                 onSelectLocation={handleMapLocationSelect}
             />
         </div>

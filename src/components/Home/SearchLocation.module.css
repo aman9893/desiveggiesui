@@ -311,11 +311,12 @@ border-radius: 1;
     }
 
     .areaName {
-        font-size: 12px;
+        font-size: 13px;
     }
 
     .addressDetail {
-        font-size: 9px;
+       font-size: 13px;
+
     }
 
     .profileButton {
