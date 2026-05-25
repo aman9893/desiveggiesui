@@ -20,6 +20,7 @@ import AdminCategories from "./pages/admin/AdminCategories";
 import AdminProducts from "./pages/admin/AdminProducts";
 import AdminProductForm from "./pages/admin/AdminProductForm";
 import AdminOrders from "./pages/admin/AdminOrders";
+import AdminOrderDetails from "./pages/admin/AdminOrderDetails";
 import AdminDeliveryPartners from "./pages/admin/AdminDeliveryPartners";
 import DeliveryLogin from "./pages/delivery/DeliveryLogin";
 import DeliveryLayout from "./pages/delivery/DeliveryLayout";
@@ -57,6 +58,7 @@ const App = () => {
                     <Route path="products/new" element={<AdminProductForm />} />
                     <Route path="products/:id/edit" element={<AdminProductForm />} />
                     <Route path="orders" element={<AdminOrders />} />
+                    <Route path="orders/:orderId" element={<AdminOrderDetails />} />
                     <Route path="delivery-partners" element={<AdminDeliveryPartners />} />
                 </Route>
 

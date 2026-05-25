@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { TruckIcon } from "lucide-react";
 import toast from "react-hot-toast";
 import type { DeliveryPartner } from "../../types";
@@ -6,6 +7,7 @@ import Loading from "../../components/Loading";
 import api from "../../config/api";
 
 export default function AdminOrders() {
+    const navigate = useNavigate();
     const currency = import.meta.env.VITE_CURRENCY_SYMBOL || "₹";
 
     const [orders, setOrders] = useState<any[]>([]);
@@ -99,7 +101,11 @@ export default function AdminOrders() {
                                 </tr>
                             ) : (
                                 orders.map((order: any) => (
-                                    <tr key={order.id} className="hover:bg-zinc-50/50 transition-colors">
+                                    <tr 
+                                        key={order.id} 
+                                        className="hover:bg-zinc-50/50 transition-colors cursor-pointer"
+                                        onClick={() => navigate(`/admin/orders/${order.id}`)}
+                                    >
                                         <td className="px-6 py-4">
                                             <p className="font-semibold text-zinc-900">#{order.id.slice(-6)}</p>
                                             <p className="text-xs text-zinc-500">{new Date(order.createdAt).toLocaleString()}</p>

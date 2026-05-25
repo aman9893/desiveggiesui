@@ -1,10 +1,12 @@
 import { Navigate, NavLink, Outlet } from "react-router-dom";
-import { PlusIcon, PackageSearchIcon, ShoppingBagIcon, LogOutIcon, BarChart3Icon, ShieldIcon, Truck, Tag } from "lucide-react";
+import { PlusIcon, PackageSearchIcon, ShoppingBagIcon, LogOutIcon, BarChart3Icon, ShieldIcon, Truck, Tag, MenuIcon, XIcon } from "lucide-react";
+import { useState } from "react";
 import Navbar from "../../components/Navbar";
 import { useAuth } from "../../context/AuthContext";
 
 export default function AdminLayout() {
     const { user, loading } = useAuth();
+    const [sidebarOpen, setSidebarOpen] = useState(true);
 
     const AdminLinkData = [
         { to: "/admin", label: "Dashboard", icon: BarChart3Icon },
@@ -28,16 +30,49 @@ export default function AdminLayout() {
                 <Navbar />
             </div>
             <div className="flex flex-col h-full lg:flex-row gap-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fade-in">
+                {/* Mobile Sidebar Toggle */}
+                <button
+                    onClick={() => setSidebarOpen(!sidebarOpen)}
+                    className="lg:hidden flex items-center gap-2 px-4 py-2 bg-app-green text-white rounded-lg font-medium w-fit"
+                >
+                    {sidebarOpen ? <XIcon className="size-5" /> : <MenuIcon className="size-5" />}
+                    {sidebarOpen ? "Close" : "Menu"}
+                </button>
+
+                {/* Mobile Overlay */}
+                {sidebarOpen && (
+                    <div
+                        className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+                        onClick={() => setSidebarOpen(false)}
+                    />
+                )}
+
                 {/* Admin Sidebar */}
-                <aside className="w-full lg:w-64 shrink-0 h-fit bg-white rounded-2xl p-4 border border-app-border">
-                    <div className="pb-4 mb-4 border-b border-app-border">
+                <aside
+                    className={`fixed lg:relative left-0 top-0 w-64 h-screen lg:h-fit z-50 lg:z-auto bg-white rounded-r-2xl lg:rounded-2xl p-4 border border-app-border transition-transform duration-300 lg:transition-none ${
+                        sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+                    }`}
+                >
+                    <div className="pb-4 mb-4 border-b border-app-border flex items-center justify-between">
                         <h2 className="text-lg font-semibold text-app-green flex items-center gap-2 px-2">
                             <ShieldIcon className="size-5 text-green-900" /> Admin Panel
                         </h2>
+                        <button
+                            onClick={() => setSidebarOpen(false)}
+                            className="lg:hidden p-1 hover:bg-gray-100 rounded-lg"
+                        >
+                            <XIcon className="size-5 text-zinc-600" />
+                        </button>
                     </div>
                     <nav className="flex flex-col gap-1.5">
                         {AdminLinkData.map((link) => (
-                            <NavLink key={link.to} to={link.to} end={true} className={({ isActive }) => `flex items-center gap-3 p-2.5 rounded-md text-sm transition-colors ${isActive ? "bg-app-green text-white" : "text-app-text-light hover:bg-orange-50 hover:text-zinc-900"}`}>
+                            <NavLink
+                                key={link.to}
+                                to={link.to}
+                                end={true}
+                                onClick={() => setSidebarOpen(false)}
+                                className={({ isActive }) => `flex items-center gap-3 p-2.5 rounded-md text-sm transition-colors ${isActive ? "bg-app-green text-white" : "text-app-text-light hover:bg-orange-50 hover:text-zinc-900"}`}
+                            >
                                 <link.icon className="size-4" /> {link.label}
                             </NavLink>
                         ))}

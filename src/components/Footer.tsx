@@ -29,7 +29,7 @@ const Footer = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     {/* Brand */}
                     <div>
-                        <Link to="/" className="flex items-center gap-2 mb-4">
+                        <Link to="/" className="flex items-center gap-2 mb-4 hover:opacity-80 transition-opacity">
                             <BikeIcon className="size-6 text-white" />
                             <span className="text-xl font-semibold">{footerData.brand.name}</span>
                         </Link>
@@ -38,7 +38,7 @@ const Footer = () => {
 
                         <div className="flex gap-3">
                             {footerData.brand.socials.map((social, i) => (
-                                <a key={i} href={social.link} className="size-9 rounded-lg bg-white/10 flex-center hover:bg-white/2">
+                                <a key={i} href={social.link} className="size-9 rounded-lg bg-white/10 flex-center hover:bg-white/20 transition-colors">
                                     <social.icon className="size-4" />
                                 </a>
                             ))}
@@ -53,11 +53,11 @@ const Footer = () => {
                                 {section.links.map((link, i) => (
                                     <li key={i}>
                                         {link.to ? (
-                                            <Link to={link.to} className="text-sm text-white/70 hover:text-white">
+                                            <Link to={link.to} className="text-sm text-white/70 hover:text-white transition-colors">
                                                 {link.label}
                                             </Link>
                                         ) : (
-                                            <a href={link.href} className="text-sm text-white/70 hover:text-white">
+                                            <a href={link.href || "#"} className="text-sm text-white/70 hover:text-white transition-colors">
                                                 {link.label}
                                             </a>
                                         )}
@@ -89,9 +89,9 @@ const Footer = () => {
 
                     <div className="flex gap-4">
                         {footerData.bottom.links.map((link, i) => (
-                            <a key={i} href={link.href} className="text-xs text-white/50 hover:text-white/70">
+                            <Link key={i} to={link.to || "/"} className="text-xs text-white/50 hover:text-white/70 transition-colors">
                                 {link.label}
-                            </a>
+                            </Link>
                         ))}
                     </div>
                 </div>

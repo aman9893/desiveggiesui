@@ -67,31 +67,31 @@ export const footerData = {
                 { label: "All Products", to: "/products" },
                 { label: "Flash Deals", to: "/deals" },
                 { label: "Track Order", to: "/orders" },
-                { label: "Delivery Partner", to: "/delivery" },
+                { label: "Delivery Partner", to: "/delivery/login" },
             ],
         },
         {
             title: "Customer Service",
             links: [
-                { label: "My Account", to: "#" },
-                { label: "Order History", to: "#" },
-                { label: "Addresses", to: "#" },
-                { label: "Help Center", href: "#" },
+                { label: "My Account", to: "/profile" },
+                { label: "Order History", to: "/orders" },
+                { label: "Addresses", to: "/addresses" },
+                { label: "Help Center", to: "/products" },
             ],
         },
     ],
 
     contact: [
-        { icon: MapPinIcon, text: "123 Green Valley Rd, Portland" },
-        { icon: PhoneIcon, text: "+1 (111) 123-4567" },
-        { icon: MailIcon, text: "hello@example.com" },
+        { icon: MapPinIcon, text: "Htech city hyderabad" },
+        { icon: PhoneIcon, text: "9806701954" },
+        { icon: MailIcon, text: "desiveggies@gmail.com" },
     ],
 
     bottom: {
-        copyright: "© 2026 Greatstack. All rights reserved.",
+        copyright: "© 2026 Galaxy scripts Pvt. Ltd. All rights reserved.",
         links: [
-            { label: "Privacy Policy", href: "#" },
-            { label: "Terms of Service", href: "#" },
+            { label: "Privacy Policy", to: "/" },
+            { label: "Terms of Service", to: "/" },
         ],
     },
 };
