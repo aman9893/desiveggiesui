@@ -100,13 +100,16 @@ const SearchLocation = () => {
                             </div>
                             {selectedLocation && (
                                 <div className={styles.addressDetail}>
-                                    {selectedLocation.buildingName || selectedLocation.address}
+                                    <div>{selectedLocation.address}</div>
                                 </div>
                             )}
                         </div>
                     </button>
 
-                    <button className={styles.profileButton}>
+                    <button 
+                        className={styles.profileButton}
+                        onClick={() => navigate("/profile")}
+                    >
                         <User className="w-5 h-5" />
                     </button>
                 </div>

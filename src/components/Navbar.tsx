@@ -75,8 +75,8 @@ const Navbar = () => {
 
                             {userMenuOpen && (
                                 <>
-                                    <div className="fixed inset-0 z-40" onClick={() => setUserMenuOpen(false)} />
-                                    <div className="absolute right-0 mt-2.5 w-56 bg-white rounded-xl shadow-lg border border-app-border py-2 z-50 animate-fade-in">
+                                    <div className="fixed inset-0 bg-black/50 z-[9997]" onClick={() => setUserMenuOpen(false)} />
+                                    <div className="absolute right-0 mt-2.5 w-56 bg-white rounded-xl shadow-lg border border-app-border py-2 z-[9998] animate-fade-in">
                                         {user && (
                                             <div className="px-4 py-2 border-b border-app-border">
                                                 <p className="text-sm font-medium text-zinc-900">{user?.name}</p>
