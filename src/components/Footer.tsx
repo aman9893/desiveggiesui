@@ -52,15 +52,9 @@ const Footer = () => {
                             <ul className="space-y-2.5">
                                 {section.links.map((link, i) => (
                                     <li key={i}>
-                                        {link.to ? (
-                                            <Link to={link.to} className="text-sm text-white/70 hover:text-white transition-colors">
-                                                {link.label}
-                                            </Link>
-                                        ) : (
-                                            <a href={link.href || "#"} className="text-sm text-white/70 hover:text-white transition-colors">
-                                                {link.label}
-                                            </a>
-                                        )}
+                                        <Link to={link.to} className="text-sm text-white/70 hover:text-white transition-colors">
+                                            {link.label}
+                                        </Link>
                                     </li>
                                 ))}
                             </ul>
