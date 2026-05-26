@@ -144,7 +144,7 @@ const LocationPickerModal = ({ isOpen, onClose, onSelectLocation }: LocationPick
         const areaName = parts[parts.length - 3]?.trim() || "";
         const buildingName = parts[0]?.trim() || "";
 
-        onSelectLocation({
+        const locationData = {
             address,
             city,
             areaName,
@@ -152,8 +152,15 @@ const LocationPickerModal = ({ isOpen, onClose, onSelectLocation }: LocationPick
             lat: currentLocation.lat,
             lng: currentLocation.lng,
             label: "Current Location",
-        });
+        };
 
+        // Save to localStorage for live location tracking
+        localStorage.setItem("selectedDeliveryLocation", JSON.stringify({ 
+            lat: currentLocation.lat, 
+            lng: currentLocation.lng 
+        }));
+
+        onSelectLocation(locationData);
         onClose();
     };
 

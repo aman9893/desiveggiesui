@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { PackageIcon, NavigationIcon } from "lucide-react";
+import { PackageIcon, Navigation2Icon } from "lucide-react";
 import OtpModal from "../../components/Delivery/OtpModal";
 import CancelModal from "../../components/Delivery/CancelModal";
 import DeliveryOrderCard from "../../components/Delivery/DeliveryOrderCard";
@@ -7,6 +7,9 @@ import Loading from "../../components/Loading";
 import type { Order } from "../../types";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { socket, onOrderAssigned } from "../../config/socket";
+import { useNotificationSound } from "../../hooks/useNotificationSound";
+import { NotificationPopup } from "../../components/NotificationPopup";
 
 const API_URL = import.meta.env.VITE_BASE_URL || "http://localhost:5000/api";
 
@@ -15,10 +18,13 @@ const getAuthHeaders = () => ({
 });
 
 export default function DeliveryDashboard() {
+    const { playNotificationSound } = useNotificationSound();
     const [orders, setOrders] = useState<Order[]>([]);
     const [loading, setLoading] = useState(true);
     const [tab, setTab] = useState<"active" | "completed">("active");
     const [tracking, setTracking] = useState(false);
+    const [orderLocations, setOrderLocations] = useState<{ [key: string]: { lat: number; lng: number } }>({});
+    const driverIdRef = useRef<string>("");
 
     // OTP modal
     const [otpModal, setOtpModal] = useState<string | null>(null);
@@ -44,6 +50,50 @@ export default function DeliveryDashboard() {
 
     useEffect(() => {
         fetchOrders();
+        
+        // Get driver ID from localStorage
+        const partnerData = localStorage.getItem("delivery_partner");
+        if (partnerData) {
+            const partner = JSON.parse(partnerData);
+            const driverId = partner.id;
+            driverIdRef.current = driverId;
+            
+            // Join driver room for notifications
+            socket.emit("join_driver", driverId);
+
+            // Listen for new orders assigned to this driver
+            const unsubscribeOrderAssigned = onOrderAssigned((data: any) => {
+                playNotificationSound();
+                toast.custom((t) => (
+                    <div
+                        className={`transform transition-all duration-300 ${
+                            t.visible ? "animate-slide-in-down" : "animate-slide-out-up"
+                        }`}
+                    >
+                        <NotificationPopup
+                            title="📦 New Order Assigned!"
+                            message={`${data.customerName} • ${data.items} item(s)`}
+                            type="info"
+                            actionLabel="View Details"
+                            onActionClick={() => {
+                                setTab("active");
+                                toast.dismiss(t.id);
+                            }}
+                        />
+                    </div>
+                ));
+                // Auto-refresh orders
+                fetchOrders();
+            });
+
+            return () => {
+                unsubscribeOrderAssigned();
+            };
+        }
+    }, []);
+
+    useEffect(() => {
+        fetchOrders();
     }, [tab]);
 
     // send location every 10s for active deliveries
@@ -60,6 +110,16 @@ export default function DeliveryDashboard() {
 
         const sendLocation = (pos: GeolocationPosition) => {
             const { latitude: lat, longitude: lng } = pos.coords;
+            // Store current location in state
+            setOrderLocations((prev) => {
+                const updated = { ...prev };
+                activeOrders.forEach((order) => {
+                    updated[order.id] = { lat, lng };
+                });
+                return updated;
+            });
+
+            // Send to backend
             activeOrders.forEach((order) => {
                 axios.put(`${API_URL}/delivery/my-deliveries/${order.id}/location`, { lat, lng }, getAuthHeaders()).catch(() => {});
             });
@@ -137,7 +197,7 @@ export default function DeliveryDashboard() {
                 ))}
                 <div className="ml-auto">
                     <button onClick={() => setTracking((prev) => !prev)} className={`px-4 py-2 text-sm font-medium rounded-xl transition-colors flex items-center gap-1.5 ${tracking ? "bg-green-600 text-white" : "bg-white text-zinc-600 border border-app-border hover:bg-app-cream"}`}>
-                        <NavigationIcon className={`w-3.5 h-3.5 ${tracking ? "animate-pulse" : ""}`} />
+                        <Navigation2Icon className={`w-3.5 h-3.5 ${tracking ? "animate-pulse" : ""}`} />
                         {tracking ? "Sharing Location" : "Share Location"}
                     </button>
                 </div>
@@ -155,7 +215,15 @@ export default function DeliveryDashboard() {
             ) : (
                 <div className="space-y-4">
                     {orders.map((order) => (
-                        <DeliveryOrderCard key={order.id} order={order} tab={tab} handleUpdateStatus={handleUpdateStatus} setOtpModal={setOtpModal} setCancelModal={setCancelModal} />
+                        <DeliveryOrderCard 
+                            key={order.id} 
+                            order={order} 
+                            tab={tab} 
+                            handleUpdateStatus={handleUpdateStatus} 
+                            setOtpModal={setOtpModal} 
+                            setCancelModal={setCancelModal}
+                            liveLocation={orderLocations[order.id]}
+                        />
                     ))}
                 </div>
             )}

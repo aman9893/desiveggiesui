@@ -70,6 +70,12 @@ export interface DeliveryPartner {
     createdAt: string;
 }
 
+export interface LiveLocation {
+    lat: number;
+    lng: number;
+    updatedAt?: string;
+}
+
 export interface Order {
     id: string;
     user: string | { id: string; name: string; email: string; phone?: string };
@@ -84,6 +90,7 @@ export interface Order {
     statusHistory: { status: string; timestamp: string; note: string }[];
     deliveryPartner: DeliveryPartner | null;
     deliveryOtp: string;
+    liveLocation?: LiveLocation | null;
     isPaid: boolean;
     createdAt: string;
 }

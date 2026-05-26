@@ -5,10 +5,14 @@ import toast from "react-hot-toast";
 import type { DeliveryPartner } from "../../types";
 import Loading from "../../components/Loading";
 import api from "../../config/api";
+import { socket, onNewOrder, onOrderStatusUpdated } from "../../config/socket";
+import { useNotificationSound } from "../../hooks/useNotificationSound";
+import { NotificationPopup } from "../../components/NotificationPopup";
 
 export default function AdminOrders() {
     const navigate = useNavigate();
     const currency = import.meta.env.VITE_CURRENCY_SYMBOL || "₹";
+    const { playNotificationSound } = useNotificationSound();
 
     const [orders, setOrders] = useState<any[]>([]);
     const [partners, setPartners] = useState<DeliveryPartner[]>([]);
@@ -37,6 +41,45 @@ export default function AdminOrders() {
     useEffect(() => {
         fetchOrders();
         fetchPartners();
+
+        // Join admin room for notifications
+        socket.emit("join_admin");
+
+        // Listen for new orders
+        const unsubscribeNewOrder = onNewOrder((data: any) => {
+            playNotificationSound();
+            toast.custom((t) => (
+                <div
+                    className={`transform transition-all duration-300 ${
+                        t.visible ? "animate-slide-in-down" : "animate-slide-out-up"
+                    }`}
+                >
+                    <NotificationPopup
+                        title="🎉 New Order Received!"
+                        message={`Order from ${data.customerName} • ${currency}${data.total.toFixed(2)}`}
+                        type="success"
+                        actionLabel="View Order"
+                        onActionClick={() => {
+                            navigate(`/admin/orders/${data.orderId}`);
+                            toast.dismiss(t.id);
+                        }}
+                    />
+                </div>
+            ));
+            // Auto-refresh orders list
+            fetchOrders();
+        });
+
+        // Listen for order status updates
+        const unsubscribeStatusUpdate = onOrderStatusUpdated((data: any) => {
+            toast.success(`Order #${data.orderId.slice(-6)} status updated to ${data.newStatus}`);
+            fetchOrders();
+        });
+
+        return () => {
+            unsubscribeNewOrder();
+            unsubscribeStatusUpdate();
+        };
     }, []);
 
     const handleStatusChange = async (id: string, newStatus: string) => {
@@ -103,10 +146,9 @@ export default function AdminOrders() {
                                 orders.map((order: any) => (
                                     <tr 
                                         key={order.id} 
-                                        className="hover:bg-zinc-50/50 transition-colors cursor-pointer"
-                                        onClick={() => navigate(`/admin/orders/${order.id}`)}
+                                        className="hover:bg-zinc-50/50 transition-colors"
                                     >
-                                        <td className="px-6 py-4">
+                                        <td className="px-6 py-4 cursor-pointer" onClick={() => navigate(`/admin/orders/${order.id}`)}>
                                             <p className="font-semibold text-zinc-900">#{order.id.slice(-6)}</p>
                                             <p className="text-xs text-zinc-500">{new Date(order.createdAt).toLocaleString()}</p>
                                         </td>

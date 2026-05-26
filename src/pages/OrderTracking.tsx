@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import type { Order } from "../types";
 import Loading from "../components/Loading";
-import { ArrowLeftIcon, MapPinIcon, PhoneIcon } from "lucide-react";
+import { ArrowLeftIcon, MapPinIcon, PhoneIcon, Navigation2Icon } from "lucide-react";
 import OrderOTP from "../components/OrderTracking/OrderOTP";
 import LiveMap from "../components/OrderTracking/LiveMap";
 import OrderTimeLine from "../components/OrderTracking/OrderTimeLine";
@@ -47,6 +47,27 @@ const OrderTracking = () => {
         return () => clearInterval(interval);
     }, [id, order?.status]);
 
+    const generateDirectionUrl = () => {
+        if (!liveLocation || !order?.shippingAddress?.lat || !order?.shippingAddress?.lng) return "";
+        
+        const origin = `${liveLocation.lat},${liveLocation.lng}`;
+        const destination = `${order.shippingAddress.lat},${order.shippingAddress.lng}`;
+        
+        const userAgent = navigator.userAgent;
+        if (/iPhone|iPad|iPod/.test(userAgent)) {
+            return `https://maps.apple.com/?saddr=${origin}&daddr=${destination}&dirflg=d`;
+        } else {
+            return `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=driving`;
+        }
+    };
+
+    const handleStartDirections = () => {
+        const directionUrl = generateDirectionUrl();
+        if (directionUrl) {
+            window.open(directionUrl, "_blank");
+        }
+    };
+
     if (loading) return <Loading />;
     if (!order) null;
 
@@ -73,6 +94,18 @@ const OrderTracking = () => {
                         <OrderOTP order={order} />
                         {/* Live Tracking Map */}
                         <LiveMap order={order} liveLocation={liveLocation} />
+                        
+                        {/* Directions Button */}
+                        {order?.shippingAddress?.lat && order?.shippingAddress?.lng && order.status !== "Delivered" && order.status !== "Cancelled" && (
+                            <button
+                                onClick={handleStartDirections}
+                                className="w-full bg-app-green text-white font-semibold py-3 rounded-2xl hover:bg-app-green-light transition-colors flex items-center justify-center gap-2"
+                            >
+                                <Navigation2Icon className="size-5" />
+                                View on Map & Get Directions
+                            </button>
+                        )}
+                        
                         {/* Progress Timeline */}
                         <OrderTimeLine order={order} />
 

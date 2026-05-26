@@ -47,6 +47,19 @@ const Checkout = () => {
     const handlePlaceOrder = async () => {
         setLoading(true);
         try {
+            // Use address coordinates or fallback to localStorage
+            let liveLocation = null;
+            
+            // Primary: Use address from checkout form
+            if (address && address.lat && address.lng) {
+                liveLocation = { lat: address.lat, lng: address.lng };
+            } 
+            // Fallback: Get from localStorage
+            else {
+                const selectedLocation = localStorage.getItem("selectedDeliveryLocation");
+                liveLocation = selectedLocation ? JSON.parse(selectedLocation) : null;
+            }
+
             const orderData = {
                 items: items.map((item) => ({
                     product: item.product.id,
@@ -54,6 +67,7 @@ const Checkout = () => {
                 })),
                 shippingAddress: address,
                 paymentMethod,
+                liveLocation,
             };
 
             const { data } = await api.post("/orders", orderData);
