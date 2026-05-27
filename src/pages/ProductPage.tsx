@@ -204,7 +204,7 @@ const ProductPage = () => {
                             </Link>
                         </div>
 
-                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 xl:gap-8">
+                        <div className="grid grid-cols-3 gap-2 sm:gap-4 xl:gap-6">
                             {relatedProducts.slice(0, 5).map((rp) => (
                                 <ProductCard key={rp.id} product={rp} />
                             ))}

@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search, MapPin, ChevronDown, User } from "lucide-react";
+import { Search, MapPin, ChevronDown, User, LogOut, MapPin as MapPinIcon, ShoppingCart, Package, Zap, Grid3X3, Bike } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
+import { useCart } from "../../context/CartContext";
 import LocationPickerModal from "./LocationPickerModal";
 import styles from "./SearchLocation.module.css";
+import { GrCycle } from "react-icons/gr";
 
 interface Location {
     label: string;
@@ -18,9 +20,12 @@ interface Location {
 const SearchLocation = () => {
     const navigate = useNavigate();
     const { user } = useAuth();
+    const { cartCount, setIsCartOpen } = useCart();
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
     const [showLocationPicker, setShowLocationPicker] = useState(false);
+    const [showProfileMenu, setShowProfileMenu] = useState(false);
+    const profileMenuRef = useRef<HTMLDivElement>(null);
 
     // Load location from localStorage on component mount
     useEffect(() => {
@@ -42,11 +47,45 @@ const SearchLocation = () => {
         }
     }, [user]);
 
+    // Close profile menu when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (profileMenuRef.current && !profileMenuRef.current.contains(event.target as Node)) {
+                setShowProfileMenu(false);
+            }
+        };
+
+        if (showProfileMenu) {
+            document.addEventListener("mousedown", handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [showProfileMenu]);
+
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
         if (searchQuery.trim()) {
             navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
         }
+    };
+
+    const handleProfileMenuClick = () => {
+        setShowProfileMenu(!showProfileMenu);
+    };
+
+    const handleMenuItemClick = (path: string) => {
+        navigate(path);
+        setShowProfileMenu(false);
+    };
+
+    const handleLogout = () => {
+        // Clear user session and logout
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("selectedDeliveryLocation");
+        navigate("/login");
+        setShowProfileMenu(false);
     };
 
     const handleLocationSelect = (location: Location) => {
@@ -85,13 +124,14 @@ const SearchLocation = () => {
                         onClick={() => setShowLocationPicker(true)}
                     >
                         <div className={styles.locationInfo}>
-                            <div className={styles.deliveryLabel}>
-                                <MapPin className={styles.headerIcon} />
-                                Delivery to
+                            <div className={styles.deliveryLabel} style={{ color: "#4CAF50", fontWeight: "bold"  ,fontSize: "16px"}}>
+                                 <Bike size={20} /> 
+                                Desi Veggies 
                             </div>
                             <div className={styles.locationDisplay}>
                                 {selectedLocation ? (
                                     <>
+                                      <MapPin className={styles.headerIcon} />
                                         <span className={styles.areaName}>
                                             {selectedLocation.areaName || selectedLocation.label}
                                         </span>
@@ -112,12 +152,91 @@ const SearchLocation = () => {
                         </div>
                     </button>
 
-                    <button 
-                        className={styles.profileButton}
-                        onClick={() => navigate("/profile")}
-                    >
-                        <User className="w-5 h-5" />
-                    </button>
+                    {/* Right Actions - Cart & User */}
+                    <div className="flex items-center gap-3">
+                        {/* Cart */}
+                        <button className="relative p-2 rounded-xl transition-colors hover:bg-orange-50" onClick={() => setIsCartOpen(true)}>
+                            <ShoppingCart className="w-5 h-5 text-zinc-900" />
+                            {cartCount > 0 && (
+                                <span className="absolute -top-1 -right-1 w-4 h-4 bg-orange-500 text-white text-[10px] rounded-full flex items-center justify-center font-medium">
+                                    {cartCount}
+                                </span>
+                            )}
+                        </button>
+
+                        {/* User Profile */}
+                        <div className="relative" ref={profileMenuRef}>
+                            {user ? (
+                                <button 
+                                    onClick={handleProfileMenuClick} 
+                                    className="flex items-center gap-2 p-2 rounded-lg hover:bg-orange-50 transition-colors"
+                                >
+                                    <div className="w-7 h-7 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 text-white flex items-center justify-center text-sm font-semibold">
+                                        {user.name.charAt(0).toUpperCase()}
+                                    </div>
+                                    <ChevronDown className="w-3 h-3 text-zinc-500" />
+                                </button>
+                            ) : (
+                                <button 
+                                    onClick={() => navigate("/login")}
+                                    className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-orange-600 rounded-full hover:bg-orange-700 transition-colors"
+                                >
+                                    <User size={16} /> Sign In
+                                </button>
+                            )}
+
+                            {/* Profile Dropdown Menu */}
+                            {showProfileMenu && user && (
+                                <>
+                                    <div className="fixed inset-0 bg-black/50 z-[9997]" onClick={() => setShowProfileMenu(false)} />
+                                    <div className="absolute right-0 mt-2.5 w-56 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-[9998] animate-fade-in">
+                                        <div className="px-4 py-2 border-b border-gray-200">
+                                            <p className="text-sm font-medium text-zinc-900">{user?.name}</p>
+                                            <p className="text-xs text-zinc-500">{user?.email}</p>
+                                        </div>
+                                        <button 
+                                            className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:bg-gray-50 transition-colors"
+                                            onClick={() => handleMenuItemClick("/profile")}
+                                        >
+                                            <User size={16} /> My Profile
+                                        </button>
+                                        <button 
+                                            className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:bg-gray-50 transition-colors"
+                                            onClick={() => handleMenuItemClick("/orders")}
+                                        >
+                                            <Package size={16} /> My Orders
+                                        </button>
+                                        <button 
+                                            className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:bg-gray-50 transition-colors"
+                                            onClick={() => handleMenuItemClick("/addresses")}
+                                        >
+                                            <MapPinIcon size={16} /> Addresses
+                                        </button>
+                                        <button 
+                                            className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:bg-gray-50 transition-colors"
+                                            onClick={() => handleMenuItemClick("/products")}
+                                        >
+                                            <Grid3X3 size={16} /> Products
+                                        </button>
+                                        <button 
+                                            className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:bg-gray-50 transition-colors"
+                                            onClick={() => handleMenuItemClick("/deals")}
+                                        >
+                                            <Zap size={16} /> Deals
+                                        </button>
+                                        <div className="border-t border-gray-200 pt-1">
+                                            <button 
+                                                onClick={handleLogout} 
+                                                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                                            >
+                                                <LogOut size={16} /> Logout
+                                            </button>
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                    </div>
                 </div>
 
                 {/* Search Bar Below Header */}

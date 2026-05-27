@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import api from "../config/api";
 import toast from "react-hot-toast";
-import { LogOut, Edit2, Save, X } from "lucide-react";
+import { LogOut, Edit2, Save, X, ArrowLeft } from "lucide-react";
 
 const Profile = () => {
     const navigate = useNavigate();
@@ -113,43 +113,43 @@ const Profile = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-gray-50 ">
             <div className="max-w-2xl mx-auto">
                 {/* Header */}
                 <div className="bg-white rounded-lg shadow-md p-6 mb-6">
                     <div className="flex items-center justify-between mb-6">
-                        <h1 className="text-3xl font-bold text-gray-900">My Profile</h1>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-3">
                             <button
                                 onClick={() => navigate("/")}
-                                className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors"
-                                title="Close"
+                                className="flex items-center justify-center p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                                title="Go back"
                             >
-                                <X className="w-5 h-5" />
+                                <ArrowLeft className="w-5 h-5" />
                             </button>
-                            <button
-                                onClick={handleLogout}
-                                className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
-                            >
-                                <LogOut className="w-5 h-5" />
-                                Logout
-                            </button>
+                            <h1 className="text-lg sm:text-2xl font-bold text-gray-900">{user.name}</h1>
                         </div>
+                        <button
+                            onClick={handleLogout}
+                            className="flex items-center gap-2 px-3 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors text-xs sm:text-sm"
+                        >
+                            <LogOut className="w-4 h-4 sm:w-5 sm:h-5" />
+                            Logout
+                        </button>
                     </div>
 
-                    {/* User Avatar and Basic Info */}
+                    {/* User Avatar and Email Info */}
                     <div className="flex items-center gap-4 mb-6">
-                        <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                        <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center text-white text-lg sm:text-2xl font-bold">
                             {user.name.charAt(0).toUpperCase()}
                         </div>
                         <div>
-                            <p className="text-xl font-semibold text-gray-900">{user.name}</p>
-                            <p className="text-gray-600">{user.email}</p>
+                            <p className="text-xs sm:text-sm text-gray-600">Email</p>
+                            <p className="text-xs sm:text-sm text-gray-900 font-medium">{user.email}</p>
                         </div>
                     </div>
 
                     {/* Member Since */}
-                    <div className="text-sm text-gray-500 border-t pt-4">
+                    <div className="text-xs sm:text-sm text-gray-500 border-t pt-4">
                         <p>Member since {new Date(user.createdAt).toLocaleDateString()}</p>
                     </div>
                 </div>
@@ -157,7 +157,7 @@ const Profile = () => {
                 {/* Edit Profile Section */}
                 <div className="bg-white rounded-lg shadow-md p-6 mb-6">
                     <div className="flex items-center justify-between mb-4">
-                        <h2 className="text-xl font-semibold text-gray-900">Personal Information</h2>
+                        <h2 className="text-base sm:text-lg font-semibold text-gray-900">Personal Information</h2>
                         <button
                             onClick={() => setIsEditMode(!isEditMode)}
                             className="flex items-center gap-2 px-3 py-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
@@ -176,7 +176,7 @@ const Profile = () => {
                             className="space-y-4"
                         >
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                                     Full Name
                                 </label>
                                 <input
@@ -189,7 +189,7 @@ const Profile = () => {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                                     Email Address
                                 </label>
                                 <input
@@ -202,7 +202,7 @@ const Profile = () => {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                                     Phone Number
                                 </label>
                                 <input
@@ -226,16 +226,16 @@ const Profile = () => {
                     ) : (
                         <div className="space-y-4">
                             <div>
-                                <label className="text-sm text-gray-600">Full Name</label>
-                                <p className="text-gray-900 font-medium">{formData.name}</p>
+                                <label className="text-xs sm:text-sm text-gray-600">Full Name</label>
+                                <p className="text-xs sm:text-sm text-gray-900 font-medium">{formData.name}</p>
                             </div>
                             <div>
-                                <label className="text-sm text-gray-600">Email Address</label>
-                                <p className="text-gray-900 font-medium">{formData.email}</p>
+                                <label className="text-xs sm:text-sm text-gray-600">Email Address</label>
+                                <p className="text-xs sm:text-sm text-gray-900 font-medium">{formData.email}</p>
                             </div>
                             <div>
-                                <label className="text-sm text-gray-600">Phone Number</label>
-                                <p className="text-gray-900 font-medium">{formData.phone || "Not provided"}</p>
+                                <label className="text-xs sm:text-sm text-gray-600">Phone Number</label>
+                                <p className="text-xs sm:text-sm text-gray-900 font-medium">{formData.phone || "Not provided"}</p>
                             </div>
                         </div>
                     )}
@@ -244,7 +244,7 @@ const Profile = () => {
                 {/* Change Password Section */}
                 <div className="bg-white rounded-lg shadow-md p-6">
                     <div className="flex items-center justify-between mb-4">
-                        <h2 className="text-xl font-semibold text-gray-900">Change Password</h2>
+                        <h2 className="text-base sm:text-lg font-semibold text-gray-900">Change Password</h2>
                         <button
                             onClick={() => setIsPasswordMode(!isPasswordMode)}
                             className="flex items-center gap-2 px-3 py-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
@@ -263,7 +263,7 @@ const Profile = () => {
                             className="space-y-4"
                         >
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                                     Current Password
                                 </label>
                                 <input
@@ -277,7 +277,7 @@ const Profile = () => {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                                     New Password
                                 </label>
                                 <input
@@ -291,7 +291,7 @@ const Profile = () => {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                                     Confirm New Password
                                 </label>
                                 <input
@@ -314,7 +314,7 @@ const Profile = () => {
                             </button>
                         </form>
                     ) : (
-                        <p className="text-gray-600 text-sm">
+                        <p className="text-xs sm:text-sm text-gray-600">
                             Keep your account secure by changing your password regularly.
                         </p>
                     )}

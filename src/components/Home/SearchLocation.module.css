@@ -1,13 +1,12 @@
 .container {
-    background: linear-gradient(125deg, #013112 0%, #2b7f02 100%);
-    
+    background: white;
     padding: 0;
     border-radius: 20px;
     margin-bottom: 16px;
-    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
     position: sticky;
     top: 0;
-      z-index: 49;
+    z-index: 49;
 }
 
 /* Header Section */
@@ -37,7 +36,7 @@
     align-items: center;
     transition: all 0.2s ease;
     outline: none;
-    color: white;
+    color: #1a1a1a;
 }
 
 .locationSelector:active {
@@ -56,8 +55,8 @@
     align-items: center;
     gap: 6px;
     font-size: 12px;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.7);
+    font-weight: 600;
+    color: #6b5d4f;
     text-transform: uppercase;
     letter-spacing: 0.3px;
 }
@@ -76,9 +75,9 @@
 }
 
 .areaName {
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 700;
-    color: white;
+    color: #1a1a1a;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -89,7 +88,7 @@
 .chevronIcon {
     width: 18px;
     height: 18px;
-    color: rgba(255, 255, 255, 0.6);
+    color: #8b7355;
     flex-shrink: 0;
     transition: transform 0.2s ease;
 }
@@ -100,7 +99,7 @@
 
 .addressDetail {
     font-size: 12px;
-    color: rgba(255, 255, 255, 0.8);
+    color: #6b5d4f;
     line-height: 1.4;
     display: flex;
     flex-direction: column;
@@ -115,56 +114,190 @@
 }
 
 .profileButton {
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: white;
+    width: auto;
+    height: 40px;
+    border-radius: 10px;
+    background: #ffffff;
+    border: 1.5px solid #e8d4be;
+    color: #1a1a1a;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 8px;
+    padding: 0 12px;
     transition: all 0.2s ease;
     flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .profileButton:hover {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.3);
+    background: #fffbf5;
+    border-color: #d4bda5;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
 .profileButton:active {
-    background: rgba(255, 255, 255, 0.2);
+    background: #f5f0e8;
     transform: scale(0.95);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.userAvatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #8b7355 0%, #6b5d4f 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+/* Profile Button Container & Dropdown Menu */
+.profileButtonContainer {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.menuBackdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9997;
+}
+
+.profileMenu {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e8d4be;
+    min-width: 240px;
+    z-index: 9998;
+    overflow: hidden;
+    animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.menuHeader {
+    padding: 12px 16px;
+    border-bottom: 1px solid #e8d4be;
+}
+
+.userName {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+.userEmail {
+    font-size: 12px;
+    color: #8b7355;
+    margin: 4px 0 0 0;
+}
+
+.menuDivider {
+    height: 1px;
+    background: #e8d4be;
+    margin: 0;
+}
+
+.menuItem {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: #1a1a1a;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.15s ease;
+    text-align: left;
+}
+
+.menuItem:hover {
+    background: #fffbf5;
+}
+
+.menuItem:active {
+    background: #f5f0e8;
+}
+
+.menuIcon {
+    width: 16px;
+    height: 16px;
+    color: #8b7355;
+    flex-shrink: 0;
+}
+
+.menuItem:hover .menuIcon {
+    color: #b89968;
+}
+
+.logoutItem {
+    border-top: 1px solid #e8d4be;
+    color: #d32f2f;
+}
+
+.logoutItem .menuIcon {
+    color: #d32f2f;
+}
+
+.logoutItem:hover {
+    background: #ffebee;
+}
+
+.logoutItem:hover .menuIcon {
+    color: #c62828;
 }
 
 /* Search Bar */
 .searchBar {
-    padding: 10px 12px;
-    background: rgba(255, 255, 255, 0.05);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 12px 14px;
+    background: rgba(255, 255, 255, 0.3);
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .searchWrapper {
     display: flex;
     align-items: center;
     background: white;
-    border-radius: 8px;
-    padding: 10px 12px;
-    gap: 8px;
+    border-radius: 12px;
+    padding: 12px 14px;
+    gap: 10px;
     transition: all 0.2s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e8d4be;
 }
 
 .searchWrapper:focus-within {
-    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    border-color: #d4bda5;
 }
 
 .searchBarIcon {
     width: 18px;
     height: 18px;
-    color: #a3adb5;
+    color: #b89968;
     flex-shrink: 0;
 }
 
@@ -206,7 +339,7 @@
     }
 
     .deliveryLabel {
-        font-size: 11px;
+        font-size: 14px;
     }
 
     .areaName {
@@ -219,7 +352,7 @@
     }
 
     .addressDetail {
-        font-size: 11px;
+        font-size: 14px;
     }
 
     .profileButton {
@@ -260,7 +393,7 @@ border-radius: 1;
     }
 
     .deliveryLabel {
-        font-size: 10px;
+        font-size: 14px;
         gap: 4px;
     }
 
@@ -308,11 +441,11 @@ border-radius: 1;
     }
 
     .deliveryLabel {
-        font-size: 9px;
+        font-size: 13px;
     }
 
     .areaName {
-        font-size: 13px;
+        font-size: 14px;
     }
 
     .addressDetail {

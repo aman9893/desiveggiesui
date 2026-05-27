@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import type { Product } from "../types";
-import { Plus, Star } from "lucide-react";
+import { Plus, Minus, Heart } from "lucide-react";
 import { useCart } from "../context/CartContext";
+import { useState } from "react";
 
 interface Props {
     product: Product;
@@ -9,59 +10,122 @@ interface Props {
 
 const ProductCard = ({ product }: Props) => {
     const currency = import.meta.env.VITE_CURRENCY_SYMBOL || "₹";
-
     const { addToCart } = useCart();
     const navigate = useNavigate();
+    const [quantity, setQuantity] = useState(0);
+    const [isFavorite, setIsFavorite] = useState(false);
+
+    const handleAddToCart = () => {
+        if (quantity > 0) {
+            for (let i = 0; i < quantity; i++) {
+                addToCart(product);
+            }
+            setQuantity(0);
+        }
+    };
+
+    const handleIncrement = () => {
+        setQuantity(quantity + 1);
+    };
+
+    const handleDecrement = () => {
+        if (quantity > 0) {
+            setQuantity(quantity - 1);
+        }
+    };
 
     return (
-        <div className="bg-white rounded-2xl overflow-hidden shadow hover:shadow-md transition-all duration-300 group animate-fade-in cursor-pointer" onClick={() => navigate(`/products/${product.id}`)}>
-            {/* Image */}
-            <div className="relative aspect-square overflow-hidden">
-                <img src={product.image} alt={product.name} className="w-full h-full object-cover p-4 group-hover:p-2 transition-all duration-300" />
+        <div className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 group animate-fade-in">
+            {/* Image Container */}
+            <div className="relative aspect-square overflow-hidden bg-gray-50 cursor-pointer" onClick={() => navigate(`/products/${product.id}`)}>
+                <img 
+                    src={product.image} 
+                    alt={product.name} 
+                    className="w-full h-full object-contain p-3 group-hover:scale-105 transition-transform duration-300" 
+                />
 
-                {/* Badges */}
-                <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">{product.discount > 0 && <span className="px-2 py-0.5 text-[10px] font-semibold uppercase bg-app-orange text-white rounded-full">{product.discount}% OFF</span>}</div>
-            </div>
-
-            {/* Info */}
-            <div className="p-3.5 text-zinc-700">
-                <h3 className="text-sm leading-snug mb-1.5 line-clamp-2">{product.name}</h3>
-
-                {/* Rating */}
-                {product.rating > 0 && (
-                    <div className="flex items-center gap-1 mb-2">
-                        <Star className="size-3 text-app-warning fill-app-warning" />
-                        <span className="text-xs font-medium text-app-text">{product.rating}</span>
-                        <span className="text-xs text-app-text-light">({product.reviewCount})</span>
+                {/* Discount Badge */}
+                {product.discount > 0 && (
+                    <div className="absolute top-2 left-2">
+                        <span className="px-2 py-1 text-[10px] font-bold uppercase bg-orange-500 text-white rounded-md">
+                            {product.discount}% OFF
+                        </span>
                     </div>
                 )}
 
-                {/* Price + Add */}
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1 truncate">
-                        <span className="text-base font-medium">
-                            {currency}
-                            {product.price.toFixed(1)}
-                        </span>
-                        <span className="text-xs text-app-text-light block">/{product.unit}</span>
-                        {product.originalPrice > product.price && (
-                            <span className="text-xs text-app-text-light line-through ml-1.5">
-                                {currency}
-                                {product.originalPrice.toFixed(1)}
-                            </span>
-                        )}
-                    </div>
+                {/* Favorites Button */}
+                <button 
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        setIsFavorite(!isFavorite);
+                    }}
+                    className="absolute top-2 right-2 p-1.5 rounded-full bg-orange-500 text-white hover:bg-orange-600 transition-colors shadow-sm"
+                >
+                    <Heart className={`w-4 h-4 ${isFavorite ? 'fill-current' : ''}`} />
+                </button>
+            </div>
 
+            {/* Info Container */}
+            <div className="p-2 sm:p-3">
+                {/* Product Name */}
+                <h3 
+                    className="text-[10px] sm:text-sm font-medium text-zinc-800 line-clamp-2 mb-1.5 cursor-pointer hover:text-orange-600 transition-colors"
+                    onClick={() => navigate(`/products/${product.id}`)}
+                >
+                    {product.name}
+                </h3>
+
+                {/* Price Info */}
+                <div className="flex items-baseline gap-1 mb-2">
+                    <span className="text-xs sm:text-lg font-bold text-zinc-900">
+                        {currency}{product.price.toFixed(0)}
+                    </span>
+                    {product.originalPrice > product.price && (
+                        <span className="text-[8px] sm:text-xs text-zinc-500 line-through">
+                            {currency}{product.originalPrice.toFixed(0)}
+                        </span>
+                    )}
+                    <span className="text-[8px] sm:text-xs text-zinc-600 ml-auto">
+                        {product.unit}
+                    </span>
+                </div>
+
+                {/* Quantity Selector & Add Button */}
+                {quantity === 0 ? (
                     <button
                         onClick={(e) => {
                             e.stopPropagation();
-                            addToCart(product);
+                            setQuantity(1);
                         }}
-                        className="size-7 rounded-full bg-app-orange text-white flex-center shrink-0 hover:bg-app-orange-dark transition-colors active:scale-95"
+                        className="w-full py-1 sm:py-1.5 bg-white border-2 border-orange-500 text-orange-500 font-bold text-[10px] sm:text-sm rounded-lg hover:bg-orange-50 transition-colors"
                     >
-                        <Plus className="size-3.5" />
+                        ADD
                     </button>
-                </div>
+                ) : (
+                    <div className="flex items-center justify-between border border-gray-300 rounded-lg overflow-hidden">
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                handleDecrement();
+                            }}
+                            className="p-0.5 sm:p-1 text-gray-600 hover:text-orange-500 transition-colors"
+                        >
+                            <Minus className="w-3 h-3 sm:w-4 sm:h-4" />
+                        </button>
+                        <span className="text-xs sm:text-sm font-bold text-zinc-800 flex-1 text-center">
+                            {quantity}
+                        </span>
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                handleIncrement();
+                            }}
+                            className="p-0.5 sm:p-1 text-gray-600 hover:text-orange-500 transition-colors"
+                        >
+                            <Plus className="w-3 h-3 sm:w-4 sm:h-4" />
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
     );

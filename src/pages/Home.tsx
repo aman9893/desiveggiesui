@@ -7,7 +7,7 @@ import PopularProducts from "../components/Home/PopularProducts";
 
 const Home = () => {
     return (
-        <div className="min-h-screen max-w-8xl mx-auto px-1 sm:px-2 lg:px-2 py-2 sm:py-2">
+        <div className="min-h-screen max-w-8xl mx-auto px-1 sm:px-1 lg:px-2 py-1 sm:py-0">
             <Hero />
             <Features />
             <HomeCategories />
