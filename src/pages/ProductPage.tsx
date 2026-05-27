@@ -175,7 +175,7 @@ const ProductPage = () => {
                                 {/* Add to Cart */}
                                 <button
                                     onClick={() => {
-                                        if (!inCart) addToCart(product, localQuantity);
+                                        if (!inCart) addToCart(product, localQuantity, true);
                                     }}
                                     disabled={product.stock === 0}
                                     className={`flex-1 py-3 font-semibold rounded-xl transition-colors flex-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] ${inCart ? "bg-app-cream text-app-green border border-app-green" : "bg-app-orange text-white hover:bg-app-orange-dark"}`}

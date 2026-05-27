@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import type { Product } from "../types";
 import { Plus, Minus, Heart } from "lucide-react";
 import { useCart } from "../context/CartContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface Props {
     product: Product;
@@ -10,27 +10,34 @@ interface Props {
 
 const ProductCard = ({ product }: Props) => {
     const currency = import.meta.env.VITE_CURRENCY_SYMBOL || "₹";
-    const { addToCart } = useCart();
+    const { items, addToCart, updateQuantity, removeFromCart } = useCart();
     const navigate = useNavigate();
     const [quantity, setQuantity] = useState(0);
     const [isFavorite, setIsFavorite] = useState(false);
 
-    const handleAddToCart = () => {
-        if (quantity > 0) {
-            for (let i = 0; i < quantity; i++) {
-                addToCart(product);
-            }
+    // Initialize quantity from cart on mount and when cart items change
+    useEffect(() => {
+        const cartItem = items.find((item) => item.product.id === product.id);
+        if (cartItem) {
+            setQuantity(cartItem.quantity);
+        } else {
             setQuantity(0);
         }
+    }, [items, product.id]);
+
+    const handleAddToCart = () => {
+        addToCart(product, 1, false);
     };
 
     const handleIncrement = () => {
-        setQuantity(quantity + 1);
+        addToCart(product, 1, false);
     };
 
     const handleDecrement = () => {
-        if (quantity > 0) {
-            setQuantity(quantity - 1);
+        if (quantity > 1) {
+            updateQuantity(product.id, quantity - 1);
+        } else if (quantity === 1) {
+            removeFromCart(product.id);
         }
     };
 
@@ -95,7 +102,7 @@ const ProductCard = ({ product }: Props) => {
                     <button
                         onClick={(e) => {
                             e.stopPropagation();
-                            setQuantity(1);
+                            handleAddToCart();
                         }}
                         className="w-full py-1 sm:py-1.5 bg-white border-2 border-orange-500 text-orange-500 font-bold text-[10px] sm:text-sm rounded-lg hover:bg-orange-50 transition-colors"
                     >
