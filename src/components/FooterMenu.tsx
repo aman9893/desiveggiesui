@@ -9,9 +9,7 @@ const FooterMenu = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const navigate = useNavigate();
-  const { setIsCartOpen, cartItems, cartCount } = useCart();
-
-  const count = cartCount || (cartItems?.reduce((total, item) => total + item.quantity, 0) || 0);
+  const { setIsCartOpen, cartCount } = useCart();
 
   useEffect(() => {
     const checkMobile = () => {
@@ -61,7 +59,7 @@ const FooterMenu = () => {
           >
             <div style={{ position: 'relative', display: 'inline-flex' }}>
               <FaShoppingCart className={styles.icon} />
-              {count > 0 && (
+              {cartCount > 0 && (
                 <span style={{
                   position: 'absolute',
                   top: '-8px',
@@ -78,7 +76,7 @@ const FooterMenu = () => {
                   fontWeight: 'bold',
                   zIndex: 10
                 }}>
-                  {count}
+                  {cartCount}
                 </span>
               )}
             </div>

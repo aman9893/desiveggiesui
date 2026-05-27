@@ -5,7 +5,6 @@ import { useAuth } from "../../context/AuthContext";
 import { useCart } from "../../context/CartContext";
 import LocationPickerModal from "./LocationPickerModal";
 import styles from "./SearchLocation.module.css";
-import { GrCycle } from "react-icons/gr";
 
 interface Location {
     label: string;
