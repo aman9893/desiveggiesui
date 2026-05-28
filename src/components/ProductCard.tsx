@@ -104,12 +104,12 @@ const ProductCard = ({ product }: Props) => {
                             e.stopPropagation();
                             handleAddToCart();
                         }}
-                        className="w-full py-1 sm:py-1.5 bg-white border-2 border-orange-500 text-orange-500 font-bold text-[10px] sm:text-sm rounded-lg hover:bg-orange-50 transition-colors"
+                        className="w-full  bg-white border p-2 border-orange-500 text-orange-500 font-bold text-[10px] sm:text-sm rounded-lg hover:bg-orange-50 transition-colors"
                     >
                         ADD
                     </button>
                 ) : (
-                    <div className="flex items-center justify-between border border-gray-300 rounded-lg overflow-hidden">
+                    <div className="flex items-center justify-between p-2 border border-gray-300 rounded-lg overflow-hidden">
                         <button
                             onClick={(e) => {
                                 e.stopPropagation();

@@ -117,16 +117,17 @@ const SearchLocation = () => {
         <div className={styles.container}>
             {/* Header with Location Selector */}
             <div className={styles.header}>
+                        <div className={styles.deliveryLabel} style={{ color: "#022a01", fontWeight: "bold"  ,fontSize: "18px"}}>
+                                 <Bike size={20} /> 
+                                Desi Veggies 
+                            </div>
                 <div className={styles.headerContent}>
                     <button 
                         className={styles.locationSelector}
                         onClick={() => setShowLocationPicker(true)}
                     >
                         <div className={styles.locationInfo}>
-                            <div className={styles.deliveryLabel} style={{ color: "#4CAF50", fontWeight: "bold"  ,fontSize: "16px"}}>
-                                 <Bike size={20} /> 
-                                Desi Veggies 
-                            </div>
+                    
                             <div className={styles.locationDisplay}>
                                 {selectedLocation ? (
                                     <>

@@ -37,8 +37,8 @@ export const heroSectionData = {
     hero_features: [
         { icon: TruckIcon, title: "Free Delivery", desc: "Orders over ₹100" },
         { icon: LeafIcon, title: "100% Organic", desc: "Certified products" },
-        { icon: ClockIcon, title: "Same Day", desc: "Express delivery" },
-        { icon: ShieldCheckIcon, title: "Secure Pay", desc: "Safe checkout" },
+        // { icon: ClockIcon, title: "Same Day", desc: "Express delivery" },
+        // { icon: ShieldCheckIcon, title: "Secure Pay", desc: "Safe checkout" },
     ],
 };
 
