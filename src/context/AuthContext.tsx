@@ -8,8 +8,8 @@ interface AuthContextType {
     user: User | null;
     token: string | null;
     loading: boolean;
-    login: (email: string, password: string) => Promise<void>;
-    register: (name: string, email: string, password: string) => Promise<void>;
+    login: (email: string | undefined, password: string, phone?: string) => Promise<void>;
+    register: (name: string, email: string | undefined, password: string, phone?: string) => Promise<void>;
     logout: () => void;
     updateUser: (userData: Partial<User>) => void;
 }
@@ -36,31 +36,46 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setLoading(false);
     }, []);
 
-    const login = async (email: string, password: string) => {
+    const login = async (email: string | undefined, password: string, phone?: string) => {
         try {
-            const { data } = await api.post("/auth/login", { email, password });
+            // Normalize phone if provided
+            const normalizedPhone = phone ? phone.replace(/\s+/g, '').replace(/[^\d+]/g, '') : undefined;
+            
+            const { data } = await api.post("/auth/login", { 
+                email: email || undefined, 
+                phone: normalizedPhone || undefined,
+                password 
+            });
             setUser(data.user);
             setToken(data.token);
             localStorage.setItem("auth_token", data.token);
             localStorage.setItem("auth_user", JSON.stringify(data.user));
-            toast.success("Login successful");
+            toast.success("Login successful", { duration: 3000 });
             navigate("/");
         } catch (error: any) {
-            toast.error(error?.response?.data?.message || error?.message);
+            toast.error(error?.response?.data?.message || error?.message, { duration: 3000 });
         }
     };
 
-    const register = async (name: string, email: string, password: string) => {
+    const register = async (name: string, email: string | undefined, password: string, phone?: string) => {
         try {
-            const { data } = await api.post("/auth/register", { name, email, password });
+            // Normalize phone if provided
+            const normalizedPhone = phone ? phone.replace(/\s+/g, '').replace(/[^\d+]/g, '') : undefined;
+            
+            const { data } = await api.post("/auth/register", { 
+                name, 
+                email: email || undefined,
+                phone: normalizedPhone || undefined,
+                password 
+            });
             setUser(data.user);
             setToken(data.token);
             localStorage.setItem("auth_token", data.token);
             localStorage.setItem("auth_user", JSON.stringify(data.user));
-            toast.success("Registration successful");
+            toast.success("Registration successful", { duration: 3000 });
             navigate("/");
         } catch (error: any) {
-            toast.error(error?.response?.data?.message || error?.message);
+            toast.error(error?.response?.data?.message || error?.message, { duration: 3000 });
         }
     };
 

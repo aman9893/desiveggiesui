@@ -17,7 +17,7 @@ export default function AdminDeliveryPartners() {
             const { data } = await api.get("/admin/delivery-partners");
             setPartners(data.partners);
         } catch (error: any) {
-            toast.error(error?.response?.data?.message || "Failed");
+            toast.error(error?.response?.data?.message || "Failed", { duration: 3000 });
         } finally {
             setLoading(false);
         }
@@ -32,12 +32,12 @@ export default function AdminDeliveryPartners() {
         setSaving(true);
         try {
             await api.post("/admin/delivery-partners", form);
-            toast.success("Partner onboarded successfully!");
+            toast.success("Partner onboarded successfully!", { duration: 3000 });
             setShowForm(false);
             setForm({ name: "", email: "", password: "", phone: "", vehicleType: "bike" });
             fetchPartners();
         } catch (error: any) {
-            toast.error(error?.response?.data?.message || "Failed");
+            toast.error(error?.response?.data?.message || "Failed", { duration: 3000 });
         } finally {
             setSaving(false);
         }
@@ -46,10 +46,10 @@ export default function AdminDeliveryPartners() {
     const toggleActive = async (id: string, isActive: boolean) => {
         try {
             await api.put(`/admin/delivery-partners/${id}`, { isActive: !isActive });
-            toast.success(isActive ? "Partner deactivated" : "Partner activated");
+            toast.success(isActive ? "Partner deactivated" : "Partner activated", { duration: 3000 });
             fetchPartners();
         } catch (error: any) {
-            toast.error(error?.response?.data?.message || "Failed");
+            toast.error(error?.response?.data?.message || "Failed", { duration: 3000 });
         }
     };
 

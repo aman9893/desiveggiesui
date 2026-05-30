@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { PackageIcon, Navigation2Icon } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { PackageIcon, Navigation2Icon, ArrowLeftIcon } from "lucide-react";
 import OtpModal from "../../components/Delivery/OtpModal";
 import CancelModal from "../../components/Delivery/CancelModal";
 import DeliveryOrderCard from "../../components/Delivery/DeliveryOrderCard";
@@ -18,6 +19,7 @@ const getAuthHeaders = () => ({
 });
 
 export default function DeliveryDashboard() {
+    const navigate = useNavigate();
     const { playNotificationSound } = useNotificationSound();
     const [orders, setOrders] = useState<Order[]>([]);
     const [loading, setLoading] = useState(true);
@@ -42,7 +44,7 @@ export default function DeliveryDashboard() {
             const { data } = await axios.get(`${API_URL}/delivery/my-deliveries?status=${tab}`, getAuthHeaders());
             setOrders(data.orders);
         } catch (error: any) {
-            toast.error(error?.response?.data?.message || "Failed to load deliveries");
+            toast.error(error?.response?.data?.message || "Failed to load deliveries", { duration: 3000 });
         } finally {
             setLoading(false);
         }
@@ -147,7 +149,7 @@ export default function DeliveryDashboard() {
     const handleUpdateStatus = async (orderId: string, status: string) => {
         try {
             await axios.put(`${API_URL}/delivery/my-deliveries/${orderId}/status`, { status }, getAuthHeaders());
-            toast.success(`Status updated to ${status}`);
+            toast.success(`Status updated to ${status}`, { duration: 3000 });
             fetchOrders();
         } catch (error: any) {
             toast.error(error?.response?.data?.message || "Failed");
@@ -159,12 +161,12 @@ export default function DeliveryDashboard() {
         setSubmitting(true);
         try {
             await axios.put(`${API_URL}/delivery/my-deliveries/${otpModal}/complete`, { otp }, getAuthHeaders());
-            toast.success("Delivery completed!");
+            toast.success("Delivery completed!", { duration: 3000 });
             setOtpModal(null);
             setOtp("");
             fetchOrders();
         } catch (error: any) {
-            toast.error(error?.response?.data?.message || error?.message);
+            toast.error(error?.response?.data?.message || error?.message, { duration: 3000 });
         } finally {
             setSubmitting(false);
         }
@@ -175,12 +177,12 @@ export default function DeliveryDashboard() {
         setSubmitting(true);
         try {
             await axios.put(`${API_URL}/delivery/my-deliveries/${cancelModal}/cancel`, { reason: cancelReason }, getAuthHeaders());
-            toast.success("Delivery cancelled");
+            toast.success("Delivery cancelled", { duration: 3000 });
             setCancelModal(null);
             setCancelReason("");
             fetchOrders();
         } catch (error: any) {
-            toast.error(error?.response?.data?.message || "Failed");
+            toast.error(error?.response?.data?.message || "Failed", { duration: 3000 });
         } finally {
             setSubmitting(false);
         }
@@ -188,6 +190,14 @@ export default function DeliveryDashboard() {
 
     return (
         <div className="space-y-6">
+            {/* Header with back button */}
+            <div className="flex items-center gap-3 mb-6">
+                <button onClick={() => navigate(-1)} className="p-2 hover:bg-white rounded-lg transition-colors">
+                    <ArrowLeftIcon className="size-6 text-app-green" />
+                </button>
+                <h1 className="text-2xl font-semibold text-app-green">My Deliveries</h1>
+            </div>
+
             {/* Tabs + Tracking toggle */}
             <div className="flex items-center gap-2 flex-wrap">
                 {(["active", "completed"] as const).map((t) => (

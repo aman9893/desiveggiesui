@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import type { Order } from "../types";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { statusColors } from "../assets/assets";
 import Loading from "../components/Loading";
-import { CalendarIcon, ChevronRightIcon, PackageIcon } from "lucide-react";
+import { CalendarIcon, ChevronRightIcon, PackageIcon, ArrowLeftIcon } from "lucide-react";
 import api from "../config/api";
 import toast from "react-hot-toast";
 
 const MyOrders = () => {
     const currency = import.meta.env.VITE_CURRENCY_SYMBOL || "₹";
+    const navigate = useNavigate();
 
     const [orders, setOrders] = useState<Order[]>([]);
     const [loading, setLoading] = useState(true);
@@ -27,7 +28,7 @@ const MyOrders = () => {
             const { data } = await api.get(`/orders${params}`);
             setOrders(data.orders);
         } catch (error: any) {
-            toast.error(error.response?.data?.message || error?.message);
+            toast.error(error.response?.data?.message || error?.message, { duration: 3000 });
         } finally {
             setLoading(false);
         }
@@ -48,7 +49,12 @@ const MyOrders = () => {
     return (
         <div className="min-h-screen bg-app-cream mb-20">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <h1 className="text-2xl font-semibold text-app-green mb-6">My Orders</h1>
+                <div className="flex items-center gap-3 mb-6">
+                    <button onClick={() => navigate(-1)} className="p-2 hover:bg-app-cream rounded-lg transition-colors">
+                        <ArrowLeftIcon className="size-6 text-app-green" />
+                    </button>
+                    <h1 className="text-2xl font-semibold text-app-green">My Orders</h1>
+                </div>
 
                 {/* Tabs */}
                 <div className="flex gap-2 mb-6 overflow-x-auto pb-2">

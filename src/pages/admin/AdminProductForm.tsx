@@ -85,10 +85,10 @@ export default function AdminProductForm() {
 
             if (isEdit) {
                 await api.put(`/products/${id}`, payload);
-                toast.success("Product updated successfully");
+                toast.success("Product updated successfully", { duration: 3000 });
             } else {
                 await api.post("/products", payload);
-                toast.success("Product created successfully");
+                toast.success("Product created successfully", { duration: 3000 });
             }
             navigate("/admin/products");
         } catch (error: any) {

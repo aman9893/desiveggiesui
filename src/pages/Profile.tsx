@@ -42,14 +42,14 @@ const Profile = () => {
 
     const handleUpdateProfile = async () => {
         if (!formData.name || !formData.email) {
-            toast.error("Name and email are required");
+            toast.error("Name and email are required", { duration: 3000 });
             return;
         }
 
         setLoading(true);
         try {
             const { data } = await api.put("/users/profile", formData);
-            toast.success("Profile updated successfully");
+            toast.success("Profile updated successfully", { duration: 3000 });
             setIsEditMode(false);
             // Update local state
             setFormData({
@@ -60,7 +60,7 @@ const Profile = () => {
             // Update AuthContext
             updateUser(data.user);
         } catch (error: any) {
-            toast.error(error?.response?.data?.message || "Failed to update profile");
+            toast.error(error?.response?.data?.message || "Failed to update profile", { duration: 3000 });
         } finally {
             setLoading(false);
         }
@@ -68,17 +68,17 @@ const Profile = () => {
 
     const handleUpdatePassword = async () => {
         if (!passwordData.currentPassword || !passwordData.newPassword) {
-            toast.error("Please fill in all password fields");
+            toast.error("Please fill in all password fields", { duration: 3000 });
             return;
         }
 
         if (passwordData.newPassword !== passwordData.confirmPassword) {
-            toast.error("New passwords do not match");
+            toast.error("New passwords do not match", { duration: 3000 });
             return;
         }
 
         if (passwordData.newPassword.length < 6) {
-            toast.error("New password must be at least 6 characters");
+            toast.error("New password must be at least 6 characters", { duration: 3000 });
             return;
         }
 
@@ -88,7 +88,7 @@ const Profile = () => {
                 currentPassword: passwordData.currentPassword,
                 newPassword: passwordData.newPassword,
             });
-            toast.success("Password updated successfully");
+            toast.success("Password updated successfully", { duration: 3000 });
             setIsPasswordMode(false);
             setPasswordData({
                 currentPassword: "",
@@ -96,7 +96,7 @@ const Profile = () => {
                 confirmPassword: "",
             });
         } catch (error: any) {
-            toast.error(error?.response?.data?.message || "Failed to update password");
+            toast.error(error?.response?.data?.message || "Failed to update password", { duration: 3000 });
         } finally {
             setLoading(false);
         }
@@ -105,7 +105,7 @@ const Profile = () => {
     const handleLogout = () => {
         logout();
         navigate("/login");
-        toast.success("Logged out successfully");
+        toast.success("Logged out successfully", { duration: 3000 });
     };
 
     if (!user) {

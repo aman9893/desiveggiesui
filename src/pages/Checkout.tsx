@@ -78,10 +78,10 @@ const Checkout = () => {
                 return;
             }
             clearCart();
-            toast.success("Order placed successfully!");
+            toast.success("Order placed successfully!", { duration: 3000 });
             navigate(`/orders/${data.order.id}`);
         } catch (error: any) {
-            toast.error(error.response?.data?.message || error.message);
+            toast.error(error.response?.data?.message || error.message, { duration: 3000 });
         } finally {
             setLoading(false);
             scrollTo(0, 0);

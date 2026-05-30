@@ -20,9 +20,9 @@ const AddressCard = ({ addr, onEditHandler, setAddresses }: AddressCardProps) =>
             const { data } = await api.delete(`/addresses/${id}`);
             setAddresses(data.addresses);
             updateUser({ addresses: data.addresses });
-            toast.success("Address removed");
+            toast.success("Address removed", { duration: 3000 });
         } catch (error: any) {
-            toast.error(error.response?.data?.message || error?.message);
+            toast.error(error.response?.data?.message || error?.message, { duration: 3000 });
         }
     };
 

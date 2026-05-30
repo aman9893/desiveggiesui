@@ -80,14 +80,14 @@ export default function AdminCategories() {
                     slug: formData.slug,
                     image: formData.image,
                 });
-                toast.success("Category updated successfully");
+                toast.success("Category updated successfully", { duration: 3000 });
             } else {
                 await api.post("/categories", {
                     name: formData.name,
                     slug: formData.slug,
                     image: formData.image,
                 });
-                toast.success("Category added successfully");
+                toast.success("Category added successfully", { duration: 3000 });
             }
             fetchCategories();
             resetForm();
@@ -113,7 +113,7 @@ export default function AdminCategories() {
 
         try {
             await api.delete(`/categories/${id}`);
-            toast.success("Category deleted successfully");
+            toast.success("Category deleted successfully", { duration: 3000 });
             fetchCategories();
         } catch (error: any) {
             toast.error(error.response?.data?.message || "Failed to delete category");

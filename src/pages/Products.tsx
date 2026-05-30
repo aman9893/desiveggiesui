@@ -47,7 +47,7 @@ const Products = () => {
             setProducts(data.products);
             setTotalPages(data.pages);
         } catch (error: any) {
-            toast.error(error?.response?.data?.message || error?.message);
+            toast.error(error?.response?.data?.message || error?.message, { duration: 3000 });
         } finally {
             setLoading(false);
         }

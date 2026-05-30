@@ -15,7 +15,7 @@ const PopularProducts = () => {
                 setProducts(data.products);
             })
             .catch((error: any) => {
-                toast.error(error.response.data.message || error?.message);
+                toast.error(error.response.data.message || error?.message, { duration: 3000 });
             });
     }, []);
     return (

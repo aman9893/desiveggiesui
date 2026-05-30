@@ -1,19 +1,21 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import type { Product } from "../types";
-import { Zap } from "lucide-react";
+import { Zap, ArrowLeftIcon } from "lucide-react";
 import Loading from "../components/Loading";
 import ProductCard from "../components/ProductCard";
 import api from "../config/api";
 import toast from "react-hot-toast";
 
 const FlashDeals = () => {
+    const navigate = useNavigate();
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         api.get("/products/flash-deals")
             .then((res) => setProducts(res.data.products))
-            .catch((error: any) => toast.error(error.response.data.message || error?.message))
+            .catch((error: any) => toast.error(error.response.data.message || error?.message, { duration: 3000 }))
             .finally(() => setLoading(false));
     }, []);
 
@@ -21,11 +23,16 @@ const FlashDeals = () => {
         <div className="min-h-screen bg-app-cream">
             {/* Banner */}
             <div className="bg-linear-to-r from-app-orange to-app-orange-dark text-white py-10">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <div className="flex-center gap-2 mb-3">
-                        <Zap className="size-6 fill-white" />
-                        <h1 className="text-3xl font-semibold">Flash Deals</h1>
-                        <Zap className="size-6 fill-white" />
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex items-center gap-3 mb-3">
+                        <button onClick={() => navigate(-1)} className="p-2 hover:bg-white/20 rounded-lg transition-colors">
+                            <ArrowLeftIcon className="size-6 text-white" />
+                        </button>
+                        <div className="flex-center gap-2">
+                            <Zap className="size-6 fill-white" />
+                            <h1 className="text-3xl font-semibold">Flash Deals</h1>
+                            <Zap className="size-6 fill-white" />
+                        </div>
                     </div>
                     <p className="text-white/80 max-w-md mx-auto">Limited-time offers on your favorite organic products. Grab them before they're gone!</p>
                 </div>

@@ -58,7 +58,7 @@ export default function AdminOrderDetails() {
             const { data } = await api.get(`/orders/${orderId}`);
             setOrder(data.order);
         } catch (error: any) {
-            toast.error(error.response?.data?.message || "Failed to load order details");
+            toast.error(error.response?.data?.message || "Failed to load order details", { duration: 3000 });
         } finally {
             setLoading(false);
         }
@@ -68,10 +68,10 @@ export default function AdminOrderDetails() {
         setUpdatingStatus(true);
         try {
             await api.put(`/orders/${orderId}/status`, { status: newStatus });
-            toast.success("Order status updated");
+            toast.success("Order status updated", { duration: 3000 });
             fetchOrderDetails();
         } catch (error: any) {
-            toast.error(error.response?.data?.message || "Failed to update status");
+            toast.error(error.response?.data?.message || "Failed to update status", { duration: 3000 });
         } finally {
             setUpdatingStatus(false);
         }

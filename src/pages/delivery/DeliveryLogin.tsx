@@ -18,10 +18,10 @@ export default function DeliveryLogin() {
             const { data } = await api.post("/delivery/login", { email, password });
             localStorage.setItem("delivery_token", data.token);
             localStorage.setItem("delivery_partner", JSON.stringify(data.partner));
-            toast.success("Login successful");
+            toast.success("Login successful", { duration: 3000 });
             navigate("/delivery");
         } catch (error: any) {
-            toast.error(error?.response?.data?.message || error?.message);
+            toast.error(error?.response?.data?.message || error?.message, { duration: 3000 });
         } finally {
             setLoading(false);
         }

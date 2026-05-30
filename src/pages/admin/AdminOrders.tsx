@@ -25,7 +25,7 @@ export default function AdminOrders() {
             const { data } = await api.get("/orders/all");
             setOrders(data.orders);
         } catch (error: any) {
-            toast.error(error.response?.data?.message || "Failed to load orders");
+            toast.error(error.response?.data?.message || "Failed to load orders", { duration: 3000 });
         } finally {
             setLoading(false);
         }
@@ -72,7 +72,7 @@ export default function AdminOrders() {
 
         // Listen for order status updates
         const unsubscribeStatusUpdate = onOrderStatusUpdated((data: any) => {
-            toast.success(`Order #${data.orderId.slice(-6)} status updated to ${data.newStatus}`);
+            toast.success(`Order #${data.orderId.slice(-6)} status updated to ${data.newStatus}`, { duration: 3000 });
             fetchOrders();
         });
 
@@ -85,7 +85,7 @@ export default function AdminOrders() {
     const handleStatusChange = async (id: string, newStatus: string) => {
         try {
             await api.put(`/orders/${id}/status`, { status: newStatus });
-            toast.success("Order status updated");
+            toast.success("Order status updated", { duration: 3000 });
             fetchOrders();
         } catch (error: any) {
             toast.error(error.response?.data?.message || "Failed to update status");
@@ -96,7 +96,7 @@ export default function AdminOrders() {
         if (!assignModal || !selectedPartner) return;
         try {
             await api.put(`/admin/orders/${assignModal}/assign`, { partnerId: selectedPartner });
-            toast.success("Delivery partner assigned!");
+            toast.success("Delivery partner assigned!", { duration: 3000 });
             setAssignModal(null);
             setSelectedPartner("");
             fetchOrders();

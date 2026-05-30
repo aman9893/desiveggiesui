@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import type { Address } from "../types";
-import { MapPinIcon, PlusIcon } from "lucide-react";
+import { MapPinIcon, PlusIcon, ArrowLeftIcon } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import Loading from "../components/Loading";
 import AddressCard from "../components/AddressCard";
 import AddressForm from "../components/AddressForm";
@@ -10,6 +11,7 @@ import toast from "react-hot-toast";
 
 const Addresses = () => {
     const { updateUser } = useAuth();
+    const navigate = useNavigate();
 
     const [addresses, setAddresses] = useState<Address[]>([]);
     const [loading, setLoading] = useState(true);
@@ -67,16 +69,16 @@ const Addresses = () => {
                 const { data } = await api.put(`/addresses/${editingId}`, payload);
                 setAddresses(data.addresses);
                 updateUser({ addresses: data.addresses });
-                toast.success("Address updated!");
+                toast.success("Address updated!", { duration: 3000 });
             } else {
                 const { data } = await api.post(`/addresses`, payload);
                 setAddresses(data.addresses);
                 updateUser({ addresses: data.addresses });
-                toast.success("Address added!");
+                toast.success("Address added!", { duration: 3000 });
             }
             resetForm();
         } catch (error: any) {
-            toast.error(error.response?.data?.message || error.message || "Failed");
+            toast.error(error.response?.data?.message || error.message || "Failed", { duration: 3000 });
         }
     };
 
@@ -92,7 +94,7 @@ const Addresses = () => {
                 setAddresses(data.addresses);
             })
             .catch((error: any) => {
-                toast.error(error.response?.data?.message || error?.message);
+                toast.error(error.response?.data?.message || error?.message, { duration: 3000 });
             })
             .finally(() => {
                 setLoading(false);
@@ -103,14 +105,17 @@ const Addresses = () => {
         <div className="min-h-screen bg-app-cream">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 {/* page header  */}
-                <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center gap-3 mb-8">
+                    <button onClick={() => navigate(-1)} className="p-2 hover:bg-white rounded-lg transition-colors">
+                        <ArrowLeftIcon className="size-6 text-app-green" />
+                    </button>
                     <h1 className="text-2xl font-semibold text-app-green">My Addresses</h1>
                     <button
                         onClick={() => {
                             resetForm();
                             setShowForm(true);
                         }}
-                        className="px-4 py-2 bg-app-green text-white text-sm font-semibold rounded-xl hover:bg-app-green-light transition-colors flex items-center gap-2"
+                        className="ml-auto px-4 py-2 bg-app-green text-white text-sm font-semibold rounded-xl hover:bg-app-green-light transition-colors flex items-center gap-2"
                     >
                         <PlusIcon className="size-4" /> Add Address
                     </button>

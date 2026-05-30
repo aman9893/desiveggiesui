@@ -19,7 +19,7 @@ const SearchResults = () => {
         api.get(`/products?search=${encodeURIComponent(query)}`)
             .then((res) => setProducts(res.data.products))
             .catch((error: any) => {
-                toast.error(error.response?.data?.message || error.message);
+                toast.error(error.response?.data?.message || error.message, { duration: 3000 });
             })
             .finally(() => setLoading(false));
     }, [query]);

@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { heroSectionData } from "../assets/assets";
 import { Link } from "react-router-dom";
-import { BikeIcon, Loader2Icon, LockIcon, MailIcon, UserIcon } from "lucide-react";
+import { BikeIcon, Loader2Icon, LockIcon, MailIcon, UserIcon, PhoneIcon } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import toast from "react-hot-toast";
 
 const Login = () => {
     const [isLoginState, setIsLoginState] = useState(true);
     const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
+    const [emailOrPhone, setEmailOrPhone] = useState("");
+    const [mobileNumber, setMobileNumber] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
 
@@ -19,12 +20,34 @@ const Login = () => {
         setLoading(true);
         try {
             if (isLoginState) {
-                await login(email, password);
+                if (!emailOrPhone || !password) {
+                    toast.error("Please provide email/phone and password", { duration: 3000 });
+                    setLoading(false);
+                    return;
+                }
+                // Check if it's email or phone
+                const isEmail = emailOrPhone.includes("@");
+                if (isEmail) {
+                    await login(emailOrPhone, password);
+                } else {
+                    await login(undefined, password, emailOrPhone);
+                }
             } else {
-                await register(name, email, password);
+                if (!name || !emailOrPhone || !mobileNumber || !password) {
+                    toast.error("Please provide all fields", { duration: 3000 });
+                    setLoading(false);
+                    return;
+                }
+                // Check if it's email or phone
+                const isEmail = emailOrPhone.includes("@");
+                if (isEmail) {
+                    await register(name, emailOrPhone, password, mobileNumber);
+                } else {
+                    await register(name, undefined, password, emailOrPhone);
+                }
             }
         } catch (error: any) {
-            toast.error(error.response?.data?.message || error?.message);
+            toast.error(error.response?.data?.message || error?.message, { duration: 3000 });
         } finally {
             setLoading(false);
         }
@@ -41,7 +64,7 @@ const Login = () => {
                 </div>
             </div>
 
-            {/* LRight Side */}
+            {/* Right Side */}
             <div className="flex-1 flex-center px-4 py-12 bg-app-cream">
                 <div className="w-full max-w-md">
                     {/* form header message */}
@@ -72,12 +95,21 @@ const Login = () => {
                             </label>
                         )}
                         <label className="text-sm flex flex-col gap-1">
-                            Email Address
+                            Email or Phone Number
                             <div className="relative">
                                 <MailIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-app-text-light" />
-                                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="you@example.com" className="w-full pl-11 pr-4 py-3 text-sm bg-white rounded-xl border not-focus:border-app-border transition-all" />
+                                <input type="text" value={emailOrPhone} onChange={(e) => setEmailOrPhone(e.target.value)} required placeholder="you@example.com or +91 98765 43210" className="w-full pl-11 pr-4 py-3 text-sm bg-white rounded-xl border not-focus:border-app-border transition-all" />
                             </div>
                         </label>
+                        {!isLoginState && (
+                            <label className="text-sm flex flex-col gap-1">
+                                Mobile Number
+                                <div className="relative">
+                                    <PhoneIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-app-text-light" />
+                                    <input type="tel" value={mobileNumber} onChange={(e) => setMobileNumber(e.target.value)} required placeholder="+91 98765 43210" className="w-full pl-11 pr-4 py-3 text-sm bg-white rounded-xl border not-focus:border-app-border transition-all" />
+                                </div>
+                            </label>
+                        )}
                         <label className="text-sm flex flex-col gap-1">
                             Password
                             <div className="relative">
