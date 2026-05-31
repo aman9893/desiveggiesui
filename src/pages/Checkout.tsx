@@ -34,7 +34,7 @@ const Checkout = () => {
 
     const [paymentMethod, setPaymentMethod] = useState("card");
 
-    const deliveryFee = cartTotal > 500 ? 0 : 50;
+    const deliveryFee = cartTotal > 100 ? 0 : 20;
     const tax = cartTotal * 0.08;
     const total = cartTotal + deliveryFee + tax;
 
@@ -166,7 +166,7 @@ const Checkout = () => {
                             </div>
 
                             <div className="flex justify-between">
-                                <span className="text-app-text-light">Delivery</span>
+                                <span className="text-app-text-light">Handling Fee</span>
                                 <span>{deliveryFee === 0 ? <span className="text-app-success">Free</span> : `${currency}${deliveryFee.toFixed(2)}`}</span>
                             </div>
 

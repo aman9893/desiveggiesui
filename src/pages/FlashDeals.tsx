@@ -48,7 +48,7 @@ const FlashDeals = () => {
                         <p className="text-sm text-app-text-light">Check back soon for amazing offers!</p>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-3 gap-2 sm:gap-4 xl:gap-6">{products.map((product) => product.stock > 0 && <ProductCard key={product.id} product={product} />)}</div>
+                    <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-8 gap-2 sm:gap-4 xl:gap-6">{products.map((product) => product.stock > 0 && <ProductCard key={product.id} product={product} />)}</div>
                 )}
             </div>
         </div>

@@ -24,7 +24,18 @@ const SearchLocation = () => {
     const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
     const [showLocationPicker, setShowLocationPicker] = useState(false);
     const [showProfileMenu, setShowProfileMenu] = useState(false);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
     const profileMenuRef = useRef<HTMLDivElement>(null);
+
+    // Detect mobile view
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
 
     // Load location from localStorage on component mount
     useEffect(() => {
@@ -113,7 +124,7 @@ const SearchLocation = () => {
         window.scrollTo(0, 0);
     };
 
-    return (
+    return isMobile ? (
         <div className={styles.container}>
             {/* Header with Location Selector */}
             <div className={styles.header}>
@@ -261,7 +272,7 @@ const SearchLocation = () => {
                 onSelectLocation={handleMapLocationSelect}
             />
         </div>
-    );
+    ) : null;
 };
 
 export default SearchLocation;

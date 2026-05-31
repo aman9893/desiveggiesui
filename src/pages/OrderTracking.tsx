@@ -95,16 +95,7 @@ const OrderTracking = () => {
                         {/* Live Tracking Map */}
                         <LiveMap order={order} liveLocation={liveLocation} />
                         
-                        {/* Directions Button */}
-                        {order?.shippingAddress?.lat && order?.shippingAddress?.lng && order.status !== "Delivered" && order.status !== "Cancelled" && (
-                            <button
-                                onClick={handleStartDirections}
-                                className="w-full bg-app-green text-white font-semibold py-3 rounded-2xl hover:bg-app-green-light transition-colors flex items-center justify-center gap-2"
-                            >
-                                <Navigation2Icon className="size-5" />
-                                View on Map & Get Directions
-                            </button>
-                        )}
+                     
                         
                         {/* Progress Timeline */}
                         <OrderTimeLine order={order} />
@@ -175,7 +166,7 @@ const OrderTracking = () => {
                                 </div>
 
                                 <div className="flex justify-between">
-                                    <span className="text-app-text-light">Delivery</span>
+                                    <span className="text-app-text-light">Handling Fee</span>
                                     <span>{order?.deliveryFee === 0 ? "Free" : `${currency}${order?.deliveryFee.toFixed(2)}`}</span>
                                 </div>
 
