@@ -19,7 +19,7 @@ const PopularProducts = () => {
             });
     }, []);
     return (
-        <section className="pb-16">
+        <section className="pb-8">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between mb-0 gap-4">
                     <div>
