@@ -20,7 +20,7 @@ const getAuthHeaders = () => ({
 
 export default function DeliveryDashboard() {
     const navigate = useNavigate();
-    const { playNotificationSound } = useNotificationSound();
+    const { playNotificationSound, playDismissalSound } = useNotificationSound();
     const [orders, setOrders] = useState<Order[]>([]);
     const [loading, setLoading] = useState(true);
     const [tab, setTab] = useState<"active" | "completed">("active");
@@ -81,6 +81,8 @@ export default function DeliveryDashboard() {
                                 setTab("active");
                                 toast.dismiss(t.id);
                             }}
+                            onClose={() => toast.dismiss(t.id)}
+                            onCloseSound={playDismissalSound}
                         />
                     </div>
                 ));

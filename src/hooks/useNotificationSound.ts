@@ -70,5 +70,31 @@ export const useNotificationSound = () => {
         }
     }, []);
 
-    return { playNotificationSound };
+    const playDismissalSound = useCallback(() => {
+        // Short dismissal beep sound - single low tone
+        try {
+            const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+            const gainNode = audioContext.createGain();
+            gainNode.connect(audioContext.destination);
+
+            const now = audioContext.currentTime;
+            const beepDuration = 0.1; // 100ms short beep
+            const dismissalVolume = 0.4; // Lower volume for dismissal
+
+            // Single beep - Low frequency (500 Hz) for dismissal
+            const osc = audioContext.createOscillator();
+            osc.connect(gainNode);
+            osc.frequency.value = 500;
+            osc.type = "sine";
+            
+            gainNode.gain.setValueAtTime(dismissalVolume, now);
+            osc.start(now);
+            osc.stop(now + beepDuration);
+            gainNode.gain.setValueAtTime(0, now + beepDuration);
+        } catch (error) {
+            console.error("Error playing dismissal sound:", error);
+        }
+    }, []);
+
+    return { playNotificationSound, playDismissalSound };
 };

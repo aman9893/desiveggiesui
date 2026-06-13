@@ -12,7 +12,7 @@ import { NotificationPopup } from "../../components/NotificationPopup";
 export default function AdminOrders() {
     const navigate = useNavigate();
     const currency = import.meta.env.VITE_CURRENCY_SYMBOL || "₹";
-    const { playNotificationSound } = useNotificationSound();
+    const { playNotificationSound, playDismissalSound } = useNotificationSound();
 
     const [orders, setOrders] = useState<any[]>([]);
     const [partners, setPartners] = useState<DeliveryPartner[]>([]);
@@ -63,6 +63,8 @@ export default function AdminOrders() {
                             navigate(`/admin/orders/${data.orderId}`);
                             toast.dismiss(t.id);
                         }}
+                        onClose={() => toast.dismiss(t.id)}
+                        onCloseSound={playDismissalSound}
                     />
                 </div>
             ));
@@ -72,7 +74,7 @@ export default function AdminOrders() {
 
         // Listen for order status updates
         const unsubscribeStatusUpdate = onOrderStatusUpdated((data: any) => {
-            toast.success(`Order #${data.orderId.slice(-6)} status updated to ${data.newStatus}`, { duration: 3000 });
+            toast.success(`Order #${data.orderId.slice(-6)} status updated to ${data.newStatus}`, { duration: 2000 });
             fetchOrders();
         });
 
@@ -85,7 +87,7 @@ export default function AdminOrders() {
     const handleStatusChange = async (id: string, newStatus: string) => {
         try {
             await api.put(`/orders/${id}/status`, { status: newStatus });
-            toast.success("Order status updated", { duration: 3000 });
+            toast.success("Order status updated", { duration: 2000 });
             fetchOrders();
         } catch (error: any) {
             toast.error(error.response?.data?.message || "Failed to update status");
@@ -96,7 +98,7 @@ export default function AdminOrders() {
         if (!assignModal || !selectedPartner) return;
         try {
             await api.put(`/admin/orders/${assignModal}/assign`, { partnerId: selectedPartner });
-            toast.success("Delivery partner assigned!", { duration: 3000 });
+            toast.success("Delivery partner assigned!", { duration: 2000 });
             setAssignModal(null);
             setSelectedPartner("");
             fetchOrders();
